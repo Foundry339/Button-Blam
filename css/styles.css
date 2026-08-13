@@ -183,7 +183,7 @@ body {
 }
 @keyframes float-up {
   0% { opacity: 1; transform: translate(-50%, -50%) scale(1); }
-  100% { opacity: 0; transform: translate(-50%, -170%) scale(1.3); }
+  100% { opacity: 0; transform: translate(-50%, -220%) scale(1.3); }
 }
 
 .balloon {
