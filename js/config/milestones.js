@@ -10,5 +10,7 @@ export const MILESTONES = [
   { id: "m5000", threshold: 5000, title: "Button Addict" },
   { id: "m10000", threshold: 10000, title: "Touch Grass" },
   { id: "m50000", threshold: 50000, title: "What Are You Doing?" },
-  { id: "m100000", threshold: 100000, title: "BUTTON GOD" },
+  { id: "m100000", threshold: 100000, title: "Send Help" },
+  { id: "m500000", threshold: 500000, title: "This Isn't Healthy" },
+  { id: "m1000000", threshold: 1000000, title: "BUTTON GOD" },
 ];
