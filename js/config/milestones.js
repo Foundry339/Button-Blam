@@ -6,7 +6,7 @@ export const MILESTONES = [
   { id: "m100", threshold: 100, title: "Button Enthusiast" },
   { id: "m500", threshold: 500, title: "Dedicated" },
   { id: "m1000", threshold: 1000, title: "Suspicious" },
-  { id: "m5000", threshold: 5000, title: "No Life" },
+  { id: "m5000", threshold: 5000, title: "Button Pro" },
   { id: "m10000", threshold: 10000, title: "Button Addict" },
   { id: "m25000", threshold: 25000, title: "Touch Grass" },
   { id: "m50000", threshold: 50000, title: "What Are You Doing?" },
