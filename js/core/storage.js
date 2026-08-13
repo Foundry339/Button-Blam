@@ -22,7 +22,7 @@ export function saveState(name, value) {
   try {
     window.localStorage.setItem(keyFor(name), JSON.stringify(value));
   } catch {
-    // Storage unavailable (private mode, quota, etc). Fail silently —
+    // Storage unavailable (private mode, quota, etc). Fail silently -
     // clicking still works, it just won't persist.
   }
 }

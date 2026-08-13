@@ -1,5 +1,5 @@
 // Achievement milestones based on lifetime click count.
-// Add/remove entries here to change achievements — nothing else needs to change.
+// Add/remove entries here to change achievements - nothing else needs to change.
 export const MILESTONES = [
   { id: "m1", threshold: 1, title: "First Click" },
   { id: "m10", threshold: 10, title: "Getting Started" },

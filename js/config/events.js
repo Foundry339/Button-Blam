@@ -1,11 +1,11 @@
 // Special event pool rolled on every click.
-// "weight" controls relative probability — a bigger number fires more often.
+// "weight" controls relative probability - a bigger number fires more often.
 // NONE_WEIGHT is the implicit "nothing happens" outcome so common events stay
 // occasional and rare/visual events stay genuinely rare.
 export const NONE_WEIGHT = 820;
 
 export const EVENTS = [
-  // Common — just a fun message, no side effects.
+  // Common - just a fun message, no side effects.
   { id: "bonus5", weight: 26, message: "+5 BONUS CLICKS!", bonus: 5, tier: "common" },
   { id: "bonus10", weight: 16, message: "+10 CLICKS!", bonus: 10, tier: "common" },
   { id: "double", weight: 14, message: "DOUBLE CLICK BONUS!", multiplyThisClick: 2, tier: "common" },
@@ -19,7 +19,7 @@ export const EVENTS = [
   { id: "demands-more", weight: 10, message: "THE BUTTON DEMANDS MORE.", tier: "common" },
   { id: "terrible-decision", weight: 10, message: "YOU HAVE MADE A TERRIBLE DECISION.", tier: "common" },
 
-  // Rare — temporarily changes the button's look or behavior.
+  // Rare - temporarily changes the button's look or behavior.
   { id: "shrink", weight: 4, message: "THE BUTTON SHRINKS AWAY.", visual: "shrink", duration: 3000, tier: "rare" },
   { id: "grow", weight: 4, message: "THE BUTTON GROWS BOLD.", visual: "grow", duration: 3000, tier: "rare" },
   { id: "shake", weight: 5, message: "THE BUTTON IS UNSTABLE.", visual: "shake", duration: 1200, tier: "rare" },

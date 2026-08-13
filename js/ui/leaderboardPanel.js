@@ -2,7 +2,7 @@ const formatter = new Intl.NumberFormat("en-US");
 
 /**
  * Renders the top-pushers list. If the local user's click count would place
- * them on the board, they're merged in and highlighted as "YOU" — a taste of
+ * them on the board, they're merged in and highlighted as "YOU" - a taste of
  * what a real connected leaderboard will feel like once core/api.js talks to
  * a backend.
  */

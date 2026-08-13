@@ -13,7 +13,7 @@ export function renderGlobalStats(els, { totalClicksAllTime, clicksToday }) {
 
 /**
  * Purely cosmetic "the world is still clicking" ticker: nudges the numbers
- * up by a small random amount every few seconds. Not persisted — it's just
+ * up by a small random amount every few seconds. Not persisted - it's just
  * ambience for the mock data, and gets replaced by real polling later.
  */
 export function startAmbientTicker(els, stats) {

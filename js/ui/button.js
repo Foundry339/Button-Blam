@@ -1,5 +1,5 @@
 // Everything about how the big button *looks* and *feels* when clicked.
-// Game logic (what a click is worth) lives in core/clickEngine.js — this
+// Game logic (what a click is worth) lives in core/clickEngine.js - this
 // file only ever touches the DOM.
 import { BUTTON_TEXT_SWAPS } from "../config/events.js";
 

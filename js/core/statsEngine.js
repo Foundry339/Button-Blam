@@ -33,7 +33,7 @@ function persist(stats) {
 export function refreshStreakForNewSession(stats) {
   const today = todayISO();
   if (stats.lastClickDate === today) {
-    // Already clicked today — streak stands as-is until the next click.
+    // Already clicked today - streak stands as-is until the next click.
     return stats;
   }
   const yesterday = new Date(Date.now() - 86_400_000).toISOString().slice(0, 10);

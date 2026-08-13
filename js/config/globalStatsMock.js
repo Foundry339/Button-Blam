@@ -1,5 +1,5 @@
 // Mock "everyone in the world" statistics.
-// core/api.js is the seam where this gets swapped for a real API response —
+// core/api.js is the seam where this gets swapped for a real API response -
 // nothing in ui/globalStatsPanel.js needs to change when that happens.
 export const MOCK_GLOBAL_STATS = {
   totalClicksAllTime: 18_492_731,

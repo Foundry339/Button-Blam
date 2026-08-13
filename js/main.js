@@ -1,5 +1,5 @@
 // App bootstrap: wires config + core logic + UI modules together.
-// This is the only file that touches all the layers at once — everything
+// This is the only file that touches all the layers at once - everything
 // else stays focused on one concern (data, game logic, or rendering).
 import { MILESTONES } from "./config/milestones.js";
 
@@ -11,6 +11,7 @@ import { fetchGlobalStats, fetchTeamTotals, fetchLeaderboard } from "./core/api.
 import { track } from "./core/analytics.js";
 
 import { pulseButton, spawnFloatingValue, applyVisualEffect, setMultiplierVisual } from "./ui/button.js";
+import { maybeSpawnBalloon } from "./ui/balloonEffect.js";
 import { renderCounter } from "./ui/counter.js";
 import { showMessage } from "./ui/messageBanner.js";
 import { showAchievementToast } from "./ui/achievementToast.js";
@@ -126,6 +127,7 @@ function handleClick(clientX, clientY) {
 
   pulseButton(dom.button);
   spawnFloatingValue(dom.stage, delta, clientX, clientY);
+  maybeSpawnBalloon(dom.stage, dom.button);
   renderPersonal();
 
   track("button_clicked", { delta, eventId: event?.id ?? null });
