@@ -12,7 +12,7 @@ const SPAWN_WINDOW_MS = 3200;
 let activeRains = 0;
 
 /** Roll the dice; rain donuts across the screen if it hits. Returns whether it fired. */
-export function maybeSpawnDonutRain(chance = 1 / 350) {
+export function maybeSpawnDonutRain(chance = 1 / 500) {
   if (activeRains >= MAX_ACTIVE_RAINS) return false;
   if (Math.random() > chance) return false;
   spawnDonutRain();
