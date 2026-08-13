@@ -18,6 +18,7 @@ import { maybeSpawnRocket } from "./ui/rocketEffect.js";
 import { maybeSpawnUfo } from "./ui/ufoEffect.js";
 import { maybeSpawnDuck } from "./ui/duckEffect.js";
 import { maybeSpawnFire } from "./ui/fireEffect.js";
+import { maybeSpawnDonutRain } from "./ui/donutEffect.js";
 import { renderCounter } from "./ui/counter.js";
 import { showMessage } from "./ui/messageBanner.js";
 import { showAchievementToast } from "./ui/achievementToast.js";
@@ -158,6 +159,10 @@ function handleClick(clientX, clientY) {
     recordSighting(sightingCounts, "fire");
     sawEffect = true;
     startColorCycle();
+  }
+  if (maybeSpawnDonutRain()) {
+    recordSighting(sightingCounts, "donut");
+    sawEffect = true;
   }
   if (sawEffect) renderSightingsGrid(dom.sightingsGrid, sightingCounts);
 

@@ -6,6 +6,7 @@ const SIGHTINGS = [
   { id: "ufo", icon: "\u{1F6F8}", title: "UFO Abductions" },
   { id: "duck", icon: "\u{1F986}", title: "Duck" },
   { id: "fire", icon: "\u{1F525}", title: "Fire" },
+  { id: "donut", icon: "\u{1F369}", title: "Donut" },
 ];
 
 /** Renders the grid of rare-effect sighting counters, reusing the achievement badge look. */

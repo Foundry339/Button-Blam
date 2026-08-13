@@ -465,6 +465,32 @@ body {
   }
 }
 
+.donut-rain-layer {
+  position: fixed;
+  inset: 0;
+  overflow: hidden;
+  pointer-events: none;
+  z-index: 1000;
+}
+.donut-rain-particle {
+  position: absolute;
+  top: -60px;
+  opacity: 0;
+  line-height: 1;
+  filter: drop-shadow(0 4px 6px rgba(0, 0, 0, 0.3));
+  animation-name: donut-fall-kf;
+  animation-timing-function: linear;
+  animation-fill-mode: forwards;
+}
+@keyframes donut-fall-kf {
+  0% { opacity: 0; transform: translate(0, 0) rotate(0deg); }
+  3% { opacity: 1; }
+  100% {
+    opacity: 1;
+    transform: translate(var(--donut-drift, 0px), calc(100vh + 120px)) rotate(var(--donut-spin, 360deg));
+  }
+}
+
 .click-counter {
   margin: 0;
   font-size: clamp(1.05rem, 4vw, 1.3rem);
