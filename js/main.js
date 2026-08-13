@@ -3,7 +3,7 @@
 // else stays focused on one concern (data, game logic, or rendering).
 import { MILESTONES } from "./config/milestones.js";
 
-import { rollEvent, resolveClickValue } from "./core/clickEngine.js";
+import { rollEvent } from "./core/clickEngine.js";
 import { loadUnlockedAchievements, checkNewlyUnlocked } from "./core/achievementEngine.js";
 import { loadSightingCounts, recordSighting } from "./core/sightingsEngine.js";
 import { loadStats, refreshStreakForNewSession, applyClick } from "./core/statsEngine.js";
@@ -11,7 +11,7 @@ import { loadOrAssignTeam, loadLocalTallyDelta, addToLocalTally } from "./core/t
 import { fetchGlobalStats, fetchTeamTotals, fetchLeaderboard } from "./core/api.js";
 import { track } from "./core/analytics.js";
 
-import { pulseButton, spawnFloatingValue, applyVisualEffect, setMultiplierVisual } from "./ui/button.js";
+import { pulseButton, spawnFloatingValue, applyVisualEffect } from "./ui/button.js";
 import { maybeSpawnBalloon } from "./ui/balloonEffect.js";
 import { maybeSpawnRocket } from "./ui/rocketEffect.js";
 import { maybeSpawnUfo } from "./ui/ufoEffect.js";
@@ -62,8 +62,6 @@ const userTeam = loadOrAssignTeam();
 
 // ---- Session-only state -----------------------------------------------
 let sessionClicks = 0;
-let activeMultiplier = 1;
-let multiplierRevertTimer = null;
 let teamTotals = { red: 0, blue: 0 };
 let leaderboardEntries = [];
 
@@ -128,7 +126,7 @@ if (dom.leaderboardSection && "IntersectionObserver" in window) {
 // ---- The click, the whole point of this website -----------------------
 function handleClick(clientX, clientY) {
   const event = rollEvent();
-  const delta = resolveClickValue(activeMultiplier, event);
+  const delta = 1;
 
   sessionClicks += delta;
   stats = applyClick(stats, delta, sessionClicks);
@@ -169,16 +167,6 @@ function handleClick(clientX, clientY) {
   if (event) {
     showMessage(dom.message, event.message);
     applyVisualEffect(dom.button, dom.buttonLabel, event);
-
-    if (event.visual === "multiplier") {
-      activeMultiplier = event.multiplier;
-      setMultiplierVisual(dom.button, activeMultiplier);
-      if (multiplierRevertTimer) clearTimeout(multiplierRevertTimer);
-      multiplierRevertTimer = window.setTimeout(() => {
-        activeMultiplier = 1;
-        setMultiplierVisual(dom.button, activeMultiplier);
-      }, event.duration);
-    }
   }
 
   const newlyUnlocked = checkNewlyUnlocked(stats.totalClicks, unlockedAchievements);

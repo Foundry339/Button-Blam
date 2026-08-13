@@ -62,9 +62,3 @@ export function applyVisualEffect(buttonEl, labelEl, event) {
     }, event.duration);
   }
 }
-
-/** Toggle the "worth 10x/100x" glow while a multiplier is active. */
-export function setMultiplierVisual(buttonEl, multiplier) {
-  buttonEl.classList.toggle("btn-multiplier", multiplier > 1);
-  buttonEl.dataset.multiplier = String(multiplier);
-}

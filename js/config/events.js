@@ -6,9 +6,6 @@ export const NONE_WEIGHT = 820;
 
 export const EVENTS = [
   // Common - just a fun message, no side effects.
-  { id: "bonus5", weight: 26, message: "+5 BONUS CLICKS!", bonus: 5, tier: "common" },
-  { id: "bonus10", weight: 16, message: "+10 CLICKS!", bonus: 10, tier: "common" },
-  { id: "double", weight: 14, message: "DOUBLE CLICK BONUS!", multiplyThisClick: 2, tier: "common" },
   { id: "likes-you", weight: 18, message: "THE BUTTON LIKES YOU.", tier: "common" },
   { id: "still-doing-this", weight: 18, message: "ARE YOU STILL DOING THIS?", tier: "common" },
   { id: "productive", weight: 18, message: "YOU COULD BE DOING SOMETHING PRODUCTIVE.", tier: "common" },
@@ -25,8 +22,6 @@ export const EVENTS = [
   { id: "shake", weight: 5, message: "THE BUTTON IS UNSTABLE.", visual: "shake", duration: 1200, tier: "rare" },
   { id: "text-swap", weight: 4, message: "THE BUTTON HAS THOUGHTS.", visual: "textSwap", duration: 2500, tier: "rare" },
   { id: "vanish", weight: 3, message: "WHERE DID IT GO?", visual: "vanish", duration: 1000, tier: "rare" },
-  { id: "worth-10x", weight: 3, message: "THE BUTTON IS NOW WORTH 10 CLICKS!", visual: "multiplier", multiplier: 10, duration: 8000, tier: "rare" },
-  { id: "worth-100x", weight: 1, message: "THE BUTTON IS WORTH 100 CLICKS!!!", visual: "multiplier", multiplier: 100, duration: 5000, tier: "ultra-rare" },
 ];
 
 // Alternate button labels shown briefly during the "textSwap" event.

@@ -18,17 +18,3 @@ export function rollEvent() {
   }
   return null;
 }
-
-/**
- * Resolve a single click into the click delta it produces, given the
- * currently-active multiplier (from a "worth 10x/100x" event, if any) and
- * whatever event was just rolled.
- * @param {number} activeMultiplier
- * @param {ReturnType<typeof rollEvent>} event
- */
-export function resolveClickValue(activeMultiplier, event) {
-  let value = 1 * activeMultiplier;
-  if (event?.bonus) value += event.bonus;
-  if (event?.multiplyThisClick) value *= event.multiplyThisClick;
-  return Math.round(value);
-}
