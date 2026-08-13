@@ -14,6 +14,7 @@ import { pulseButton, spawnFloatingValue, applyVisualEffect, setMultiplierVisual
 import { maybeSpawnBalloon } from "./ui/balloonEffect.js";
 import { maybeSpawnRocket } from "./ui/rocketEffect.js";
 import { maybeSpawnUfo } from "./ui/ufoEffect.js";
+import { maybeSpawnDuck } from "./ui/duckEffect.js";
 import { renderCounter } from "./ui/counter.js";
 import { showMessage } from "./ui/messageBanner.js";
 import { showAchievementToast } from "./ui/achievementToast.js";
@@ -132,6 +133,7 @@ function handleClick(clientX, clientY) {
   maybeSpawnBalloon(dom.stage, dom.button);
   maybeSpawnRocket(dom.stage, dom.button);
   maybeSpawnUfo(dom.stage, dom.button, dom.buttonLabel);
+  maybeSpawnDuck(dom.stage, dom.button);
   renderPersonal();
 
   track("button_clicked", { delta, eventId: event?.id ?? null });
