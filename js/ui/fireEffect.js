@@ -11,7 +11,7 @@ const MAX_PARTICLES = 20;
 let activeBursts = 0;
 
 /** Roll the dice; spawn a fire burst near the button if it hits. Returns whether it fired. */
-export function maybeSpawnFire(stageEl, buttonEl, chance = 0.5) {
+export function maybeSpawnFire(stageEl, buttonEl, chance = 0.005) {
   if (activeBursts >= MAX_ACTIVE_BURSTS) return false;
   if (Math.random() > chance) return false;
   spawnFireBurst(stageEl, buttonEl);
