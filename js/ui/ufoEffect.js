@@ -19,11 +19,12 @@ const UFO_SVG = `
 
 let activeUfos = 0;
 
-/** Roll the dice; send a UFO to abduct the button if it hits. */
+/** Roll the dice; send a UFO to abduct the button if it hits. Returns whether it fired. */
 export function maybeSpawnUfo(stageEl, buttonEl, labelEl, chance = 0.002) {
-  if (activeUfos >= MAX_ACTIVE_UFOS) return;
-  if (Math.random() > chance) return;
+  if (activeUfos >= MAX_ACTIVE_UFOS) return false;
+  if (Math.random() > chance) return false;
   spawnUfo(stageEl, buttonEl, labelEl);
+  return true;
 }
 
 function spawnUfo(stageEl, buttonEl, labelEl) {

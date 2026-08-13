@@ -6,11 +6,12 @@ const MAX_ACTIVE_BALLOONS = 2;
 
 let activeBalloons = 0;
 
-/** Roll the dice; spawn a balloon near the button if it hits. */
+/** Roll the dice; spawn a balloon near the button if it hits. Returns whether it fired. */
 export function maybeSpawnBalloon(stageEl, buttonEl, chance = 0.05) {
-  if (activeBalloons >= MAX_ACTIVE_BALLOONS) return;
-  if (Math.random() > chance) return;
+  if (activeBalloons >= MAX_ACTIVE_BALLOONS) return false;
+  if (Math.random() > chance) return false;
   spawnBalloon(stageEl, buttonEl);
+  return true;
 }
 
 function spawnBalloon(stageEl, buttonEl) {

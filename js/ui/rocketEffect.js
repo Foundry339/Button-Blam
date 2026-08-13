@@ -22,11 +22,12 @@ const ROCKET_SVG = `
 
 let activeRockets = 0;
 
-/** Roll the dice; blast off a rocket from the button if it hits. */
+/** Roll the dice; blast off a rocket from the button if it hits. Returns whether it fired. */
 export function maybeSpawnRocket(stageEl, buttonEl, chance = 0.02) {
-  if (activeRockets >= MAX_ACTIVE_ROCKETS) return;
-  if (Math.random() > chance) return;
+  if (activeRockets >= MAX_ACTIVE_ROCKETS) return false;
+  if (Math.random() > chance) return false;
   spawnRocket(stageEl, buttonEl);
+  return true;
 }
 
 function spawnRocket(stageEl, buttonEl) {

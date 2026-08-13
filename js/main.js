@@ -5,6 +5,7 @@ import { MILESTONES } from "./config/milestones.js";
 
 import { rollEvent, resolveClickValue } from "./core/clickEngine.js";
 import { loadUnlockedAchievements, checkNewlyUnlocked } from "./core/achievementEngine.js";
+import { loadSightingCounts, recordSighting } from "./core/sightingsEngine.js";
 import { loadStats, refreshStreakForNewSession, applyClick } from "./core/statsEngine.js";
 import { loadOrAssignTeam, loadLocalTallyDelta, addToLocalTally } from "./core/teamEngine.js";
 import { fetchGlobalStats, fetchTeamTotals, fetchLeaderboard } from "./core/api.js";
@@ -19,6 +20,7 @@ import { renderCounter } from "./ui/counter.js";
 import { showMessage } from "./ui/messageBanner.js";
 import { showAchievementToast } from "./ui/achievementToast.js";
 import { renderAchievementsGrid } from "./ui/achievementsPanel.js";
+import { renderSightingsGrid } from "./ui/sightingsPanel.js";
 import { renderPersonalStats } from "./ui/statsPanel.js";
 import { renderGlobalStats, startAmbientTicker } from "./ui/globalStatsPanel.js";
 import { renderLeaderboard } from "./ui/leaderboardPanel.js";
@@ -33,6 +35,7 @@ const dom = {
   counter: el("click-counter"),
   message: el("event-message"),
   achievementsGrid: el("achievements-grid"),
+  sightingsGrid: el("sightings-grid"),
   toastContainer: el("achievement-toast-container"),
   statTotal: el("stat-total"),
   statStreak: el("stat-streak"),
@@ -54,6 +57,7 @@ const dom = {
 let stats = loadStats();
 stats = refreshStreakForNewSession(stats);
 const unlockedAchievements = loadUnlockedAchievements();
+const sightingCounts = loadSightingCounts();
 const userTeam = loadOrAssignTeam();
 
 // ---- Session-only state -----------------------------------------------
@@ -88,6 +92,7 @@ function renderBoard() {
 // ---- Initial render -----------------------------------------------------
 renderPersonal();
 renderAchievementsGrid(dom.achievementsGrid, MILESTONES, unlockedAchievements);
+renderSightingsGrid(dom.sightingsGrid, sightingCounts);
 
 Promise.all([fetchGlobalStats(), fetchTeamTotals(), fetchLeaderboard()]).then(
   ([globalStats, totals, leaderboard]) => {
@@ -130,10 +135,26 @@ function handleClick(clientX, clientY) {
 
   pulseButton(dom.button);
   spawnFloatingValue(dom.stage, delta, clientX, clientY);
-  maybeSpawnBalloon(dom.stage, dom.button);
-  maybeSpawnRocket(dom.stage, dom.button);
-  maybeSpawnUfo(dom.stage, dom.button, dom.buttonLabel);
-  maybeSpawnDuck(dom.stage, dom.button);
+
+  let sawEffect = false;
+  if (maybeSpawnBalloon(dom.stage, dom.button)) {
+    recordSighting(sightingCounts, "balloon");
+    sawEffect = true;
+  }
+  if (maybeSpawnRocket(dom.stage, dom.button)) {
+    recordSighting(sightingCounts, "rocket");
+    sawEffect = true;
+  }
+  if (maybeSpawnUfo(dom.stage, dom.button, dom.buttonLabel)) {
+    recordSighting(sightingCounts, "ufo");
+    sawEffect = true;
+  }
+  if (maybeSpawnDuck(dom.stage, dom.button)) {
+    recordSighting(sightingCounts, "duck");
+    sawEffect = true;
+  }
+  if (sawEffect) renderSightingsGrid(dom.sightingsGrid, sightingCounts);
+
   renderPersonal();
 
   track("button_clicked", { delta, eventId: event?.id ?? null });
