@@ -26,3 +26,15 @@ export function saveState(name, value) {
     // clicking still works, it just won't persist.
   }
 }
+
+/** Wipes every piece of state this game has ever saved (stats, achievements, etc). */
+export function resetAll() {
+  try {
+    const prefix = `${NAMESPACE}:`;
+    for (const key of Object.keys(window.localStorage)) {
+      if (key.startsWith(prefix)) window.localStorage.removeItem(key);
+    }
+  } catch {
+    // Storage unavailable - nothing to reset.
+  }
+}

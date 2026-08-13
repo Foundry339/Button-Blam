@@ -7,6 +7,7 @@ import { rollEvent } from "./core/clickEngine.js";
 import { loadUnlockedAchievements, checkNewlyUnlocked } from "./core/achievementEngine.js";
 import { loadSightingCounts, recordSighting } from "./core/sightingsEngine.js";
 import { loadStats, refreshStreakForNewSession, applyClick } from "./core/statsEngine.js";
+import { resetAll } from "./core/storage.js";
 import { loadOrAssignTeam, loadLocalTallyDelta, addToLocalTally } from "./core/teamEngine.js";
 import { fetchGlobalStats, fetchTeamTotals, fetchLeaderboard } from "./core/api.js";
 import { track } from "./core/analytics.js";
@@ -51,6 +52,7 @@ const dom = {
   teamBlueBar: el("team-blue-bar"),
   leaderboardList: el("leaderboard-list"),
   leaderboardSection: el("leaderboard"),
+  resetButton: el("reset-button"),
 };
 
 // ---- Persisted state -------------------------------------------------
@@ -190,4 +192,14 @@ dom.button.addEventListener("click", (e) => {
   const x = e.clientX || rect.left + rect.width / 2;
   const y = e.clientY || rect.top + rect.height / 2;
   handleClick(x, y);
+});
+
+dom.resetButton?.addEventListener("click", () => {
+  const confirmed = window.confirm(
+    "Reset all progress? This wipes your total clicks, achievements, and rare sightings on this device. This can't be undone."
+  );
+  if (!confirmed) return;
+  track("progress_reset");
+  resetAll();
+  window.location.reload();
 });

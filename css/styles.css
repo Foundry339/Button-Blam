@@ -670,6 +670,30 @@ body {
   padding-top: 8px;
 }
 
+.reset-button {
+  margin-top: 10px;
+  padding: 6px 14px;
+  font-family: inherit;
+  font-size: 0.75rem;
+  font-weight: 600;
+  color: rgba(247, 243, 255, 0.35);
+  background: transparent;
+  border: 1px solid rgba(247, 243, 255, 0.18);
+  border-radius: 999px;
+  cursor: pointer;
+  transition: color 150ms ease, border-color 150ms ease, background 150ms ease;
+}
+.reset-button:hover,
+.reset-button:focus-visible {
+  color: var(--red);
+  border-color: rgba(255, 77, 94, 0.5);
+  background: rgba(255, 77, 94, 0.08);
+}
+.reset-button:focus-visible {
+  outline: 2px solid var(--red);
+  outline-offset: 2px;
+}
+
 /* ---------- Achievement toast ---------- */
 .achievement-toast-container {
   position: fixed;
