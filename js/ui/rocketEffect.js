@@ -1,4 +1,5 @@
-// Rare rocket ship that blasts off from the button and rockets offscreen.
+// Rare rocket ship that blasts off from the button and rockets offscreen,
+// at a random angle - straight up, a diagonal climb, or nearly sideways.
 // Pure eye candy - no gameplay effect, just a reason to keep clicking.
 
 const MAX_ACTIVE_ROCKETS = 1;
@@ -37,16 +38,21 @@ function spawnRocket(stageEl, buttonEl) {
   rocket.setAttribute("aria-hidden", "true");
   rocket.innerHTML = ROCKET_SVG;
 
-  const riseDistance = -(900 + Math.random() * 300);
-  const drift = (Math.random() * 2 - 1) * 70;
-  const duration = 900 + Math.random() * 400;
-  const startTilt = (Math.random() * 2 - 1) * 8;
+  // Angle measured clockwise from straight up: 0 = vertical, +-90 = sideways.
+  // Biased away from dead-center-vertical so diagonal/horizontal launches
+  // actually show up instead of being drowned out by near-90 rolls.
+  const angleDeg = (Math.random() * 2 - 1) * 80;
+  const angleRad = (angleDeg * Math.PI) / 180;
+  const travelDistance = Math.max(stageRect.width, stageRect.height) * (1.15 + Math.random() * 0.35);
+  const drift = travelDistance * Math.sin(angleRad);
+  const riseDistance = -travelDistance * Math.cos(angleRad);
+  const duration = 900 + Math.random() * 500;
 
   rocket.style.setProperty("--rise-distance", `${riseDistance}px`);
   rocket.style.setProperty("--drift", `${drift}px`);
   rocket.style.setProperty("--flight-duration", `${duration}ms`);
-  rocket.style.setProperty("--start-tilt", `${startTilt}deg`);
-  rocket.style.setProperty("--end-tilt", `${startTilt * 0.4}deg`);
+  rocket.style.setProperty("--start-tilt", "0deg");
+  rocket.style.setProperty("--end-tilt", `${angleDeg}deg`);
   rocket.style.left = `${buttonRect.left - stageRect.left + buttonRect.width / 2}px`;
   rocket.style.top = `${buttonRect.top - stageRect.top + buttonRect.height * 0.5}px`;
 
@@ -54,13 +60,20 @@ function spawnRocket(stageEl, buttonEl) {
   activeRockets += 1;
   requestAnimationFrame(() => rocket.classList.add("is-launching"));
 
+  // Bounding-box center tracks the rocket accurately even mid-rotation;
+  // offsetting backward along the travel angle lands roughly on the flame
+  // regardless of which direction the rocket is currently pointed.
+  const backX = -Math.sin(angleRad) * 14;
+  const backY = Math.cos(angleRad) * 14;
   const exhaustTimer = window.setInterval(() => {
     if (!rocket.isConnected) {
       window.clearInterval(exhaustTimer);
       return;
     }
     const rocketRect = rocket.getBoundingClientRect();
-    spawnExhaust(stageEl, rocketRect.left + rocketRect.width / 2 - stageRect.left, rocketRect.bottom - stageRect.top - 6);
+    const centerX = rocketRect.left + rocketRect.width / 2 - stageRect.left;
+    const centerY = rocketRect.top + rocketRect.height / 2 - stageRect.top;
+    spawnExhaust(stageEl, centerX + backX, centerY + backY);
   }, EXHAUST_INTERVAL_MS);
 
   window.setTimeout(() => {
