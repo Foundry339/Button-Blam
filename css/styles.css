@@ -102,15 +102,19 @@ body {
 
 .main-button {
   --size: clamp(190px, 55vw, 300px);
+  --btn-bright: var(--accent-bright);
+  --btn-mid: var(--accent);
+  --btn-dark: #5b21b6;
+  --btn-glow: 124, 58, 237;
   width: var(--size);
   height: var(--size);
   border-radius: 50%;
   border: none;
   cursor: pointer;
-  background: radial-gradient(circle at 35% 30%, var(--accent-bright), var(--accent) 60%, #5b21b6 100%);
+  background: radial-gradient(circle at 35% 30%, var(--btn-bright), var(--btn-mid) 60%, var(--btn-dark) 100%);
   box-shadow:
-    0 0 0 8px rgba(124, 58, 237, 0.15),
-    0 20px 45px -12px rgba(124, 58, 237, 0.65),
+    0 0 0 8px rgba(var(--btn-glow), 0.15),
+    0 20px 45px -12px rgba(var(--btn-glow), 0.65),
     inset 0 -6px 12px rgba(0, 0, 0, 0.25),
     inset 0 6px 12px rgba(255, 255, 255, 0.2);
   color: #fff;
@@ -120,7 +124,7 @@ body {
   letter-spacing: 0.02em;
   touch-action: manipulation;
   user-select: none;
-  transition: transform 120ms ease, box-shadow 120ms ease;
+  transition: transform 120ms ease, box-shadow 120ms ease, background 220ms ease;
 }
 
 .main-button:hover {
@@ -130,8 +134,8 @@ body {
 .main-button:active {
   transform: scale(0.94);
   box-shadow:
-    0 0 0 8px rgba(124, 58, 237, 0.15),
-    0 10px 25px -10px rgba(124, 58, 237, 0.6),
+    0 0 0 8px rgba(var(--btn-glow), 0.15),
+    0 10px 25px -10px rgba(var(--btn-glow), 0.6),
     inset 0 -3px 8px rgba(0, 0, 0, 0.3),
     inset 0 3px 8px rgba(255, 255, 255, 0.15);
 }
@@ -439,6 +443,26 @@ body {
   75% { transform: translate(calc(var(--cross-distance, 0px) * 0.75), -16px) rotate(4deg); }
   92% { opacity: 1; }
   100% { opacity: 0; transform: translate(var(--cross-distance, 0px), 0) rotate(-3deg); }
+}
+
+.fire-particle {
+  position: absolute;
+  transform: translate(-50%, -50%);
+  pointer-events: none;
+  line-height: 1;
+  z-index: 6;
+  animation-name: fire-rise-kf;
+  animation-timing-function: ease-out;
+  animation-fill-mode: forwards;
+}
+@keyframes fire-rise-kf {
+  0% { opacity: 0; transform: translate(-50%, -50%) scale(0.5) rotate(0deg); }
+  15% { opacity: 1; transform: translate(-50%, -50%) scale(1.15) rotate(-6deg); }
+  100% {
+    opacity: 0;
+    transform: translate(calc(-50% + var(--fire-drift, 0px)), calc(-50% + var(--fire-rise, -120px))) scale(0.9)
+      rotate(8deg);
+  }
 }
 
 .click-counter {

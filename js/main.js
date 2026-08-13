@@ -12,11 +12,12 @@ import { loadOrAssignTeam, loadLocalTallyDelta, addToLocalTally } from "./core/t
 import { fetchGlobalStats, fetchTeamTotals, fetchLeaderboard } from "./core/api.js";
 import { track } from "./core/analytics.js";
 
-import { pulseButton, spawnFloatingValue, applyVisualEffect } from "./ui/button.js";
+import { pulseButton, spawnFloatingValue, applyVisualEffect, startColorCycle, tickColorCycle } from "./ui/button.js";
 import { maybeSpawnBalloon } from "./ui/balloonEffect.js";
 import { maybeSpawnRocket } from "./ui/rocketEffect.js";
 import { maybeSpawnUfo } from "./ui/ufoEffect.js";
 import { maybeSpawnDuck } from "./ui/duckEffect.js";
+import { maybeSpawnFire } from "./ui/fireEffect.js";
 import { renderCounter } from "./ui/counter.js";
 import { showMessage } from "./ui/messageBanner.js";
 import { showAchievementToast } from "./ui/achievementToast.js";
@@ -153,7 +154,14 @@ function handleClick(clientX, clientY) {
     recordSighting(sightingCounts, "duck");
     sawEffect = true;
   }
+  if (maybeSpawnFire(dom.stage, dom.button)) {
+    recordSighting(sightingCounts, "fire");
+    sawEffect = true;
+    startColorCycle();
+  }
   if (sawEffect) renderSightingsGrid(dom.sightingsGrid, sightingCounts);
+
+  tickColorCycle(dom.button);
 
   renderPersonal();
 
