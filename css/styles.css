@@ -295,6 +295,11 @@ body {
 @keyframes rocket-launch-kf {
   0% { opacity: 0; transform: translate(-50%, 0) rotate(var(--start-tilt, 0deg)) scale(0.6); }
   10% { opacity: 1; transform: translate(-50%, -6%) rotate(var(--start-tilt, 0deg)) scale(0.75); }
+  25% {
+    opacity: 1;
+    transform: translate(calc(-50% + var(--drift, 0px) * 0.12), calc(var(--rise-distance, -1000px) * 0.12))
+      rotate(var(--end-tilt, 0deg)) scale(0.85);
+  }
   100% {
     opacity: 0;
     transform: translate(calc(-50% + var(--drift, 0px)), var(--rise-distance, -1000px))
