@@ -1,0 +1,149 @@
+<!doctype html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1" />
+  <title>Just One More Click — The World's Most Pointless Button</title>
+  <meta name="description" content="How many times can you click a completely pointless button? Find out. Track your clicks, unlock achievements, and compete with other button pushers." />
+  <meta name="theme-color" content="#7c3aed" />
+
+  <meta property="og:type" content="website" />
+  <meta property="og:title" content="Just One More Click — The World's Most Pointless Button" />
+  <meta property="og:description" content="How many times can you click a completely pointless button? Find out. Track your clicks, unlock achievements, and compete with other button pushers." />
+
+  <meta name="twitter:card" content="summary" />
+  <meta name="twitter:title" content="Just One More Click" />
+  <meta name="twitter:description" content="A completely pointless button. You will click it anyway." />
+
+  <link rel="icon" href="data:image/svg+xml,<svg xmlns=%22http://www.w3.org/2000/svg%22 viewBox=%220 0 100 100%22><text y=%22.9em%22 font-size=%2290%22>🔘</text></svg>" />
+  <link rel="stylesheet" href="css/styles.css" />
+</head>
+<body>
+
+  <!-- Ad slot: top -->
+  <div class="ad-slot ad-slot--top" aria-label="Advertisement placeholder">
+    <span>Ad space — 728×90</span>
+  </div>
+
+  <main class="page">
+
+    <!-- 1 & 2: Title + subtitle -->
+    <header class="hero">
+      <h1 class="hero__title">JUST ONE MORE CLICK</h1>
+      <p class="hero__subtitle">A button that does absolutely nothing important. You will click it anyway.</p>
+    </header>
+
+    <!-- 3, 4, 5: The button, counter, and event message -->
+    <section class="click-zone" id="button-stage" aria-live="off">
+      <button id="main-button" class="main-button" type="button" aria-label="Click the button">
+        <span id="button-label" class="main-button__label">CLICK ME</span>
+      </button>
+
+      <p id="click-counter" class="click-counter">You've clicked: 0 times</p>
+      <p id="event-message" class="event-message" role="status" aria-live="polite"></p>
+    </section>
+
+    <!-- 6: Achievements -->
+    <section class="panel" aria-labelledby="achievements-heading">
+      <h2 id="achievements-heading" class="panel__heading">Achievements</h2>
+      <ul id="achievements-grid" class="achievements-grid"></ul>
+    </section>
+
+    <!-- Ad slot: in-content -->
+    <div class="ad-slot ad-slot--content" aria-label="Advertisement placeholder">
+      <span>Ad space — 336×280</span>
+    </div>
+
+    <!-- 7: Personal statistics -->
+    <section class="panel" aria-labelledby="stats-heading">
+      <h2 id="stats-heading" class="panel__heading">Your Stats</h2>
+      <div class="stats-grid">
+        <div class="stat-card">
+          <span class="stat-card__value" id="stat-total">0</span>
+          <span class="stat-card__label">Total Clicks</span>
+        </div>
+        <div class="stat-card">
+          <span class="stat-card__value" id="stat-streak">0 days</span>
+          <span class="stat-card__label">Current Streak</span>
+        </div>
+        <div class="stat-card">
+          <span class="stat-card__value" id="stat-highest-session">0</span>
+          <span class="stat-card__label">Best Session</span>
+        </div>
+        <div class="stat-card">
+          <span class="stat-card__value" id="stat-achievements">0</span>
+          <span class="stat-card__label">Achievements</span>
+        </div>
+      </div>
+    </section>
+
+    <!-- 8: Global stats -->
+    <section class="panel panel--dark" aria-labelledby="global-heading">
+      <h2 id="global-heading" class="panel__heading">Total Clicks By Everyone</h2>
+      <div class="global-stats">
+        <div class="global-stat">
+          <span class="global-stat__value" id="global-all-time">—</span>
+          <span class="global-stat__label">All-Time Clicks</span>
+        </div>
+        <div class="global-stat">
+          <span class="global-stat__value" id="global-today">—</span>
+          <span class="global-stat__label">Clicks Today</span>
+        </div>
+      </div>
+    </section>
+
+    <!-- 9: Button Wars -->
+    <section class="panel" id="team-card" aria-labelledby="team-heading">
+      <h2 id="team-heading" class="panel__heading">This Week's Button War</h2>
+      <p id="team-your-team" class="team-your-team"></p>
+      <div class="team-bar">
+        <div class="team-bar__fill team-bar__fill--red" id="team-red-bar"></div>
+        <div class="team-bar__fill team-bar__fill--blue" id="team-blue-bar"></div>
+      </div>
+      <div class="team-totals">
+        <div class="team-total team-total--red">
+          <span class="team-total__label">🔴 Red Button</span>
+          <span class="team-total__value" id="team-red-count">0</span>
+        </div>
+        <div class="team-total team-total--blue">
+          <span class="team-total__label">🔵 Blue Button</span>
+          <span class="team-total__value" id="team-blue-count">0</span>
+        </div>
+      </div>
+    </section>
+
+    <!-- 10: Leaderboard -->
+    <section class="panel" id="leaderboard" aria-labelledby="leaderboard-heading">
+      <h2 id="leaderboard-heading" class="panel__heading">Top Button Pushers</h2>
+      <ol id="leaderboard-list" class="leaderboard"></ol>
+    </section>
+
+    <!-- 11: Explanation -->
+    <section class="panel panel--explainer" aria-labelledby="about-heading">
+      <h2 id="about-heading" class="panel__heading">What Is This?</h2>
+      <p>
+        Just One More Click is a button. That's it. There's no prize, no product, no
+        purpose — just a satisfying click, a rising number, and the faint, growing
+        suspicion that you should probably stop. You won't. Your clicks are saved on
+        this device, achievements unlock as you go, and your team needs you in the
+        Button War. Good luck.
+      </p>
+    </section>
+
+    <!-- Ad slot: bottom -->
+    <div class="ad-slot ad-slot--bottom" aria-label="Advertisement placeholder">
+      <span>Ad space — 728×90</span>
+    </div>
+
+    <!-- 12: Footer -->
+    <footer class="footer">
+      <p>Just One More Click — proudly accomplishing nothing since today.</p>
+    </footer>
+
+  </main>
+
+  <div id="achievement-toast-container" class="achievement-toast-container" aria-live="polite"></div>
+
+  <script type="module" src="js/main.js"></script>
+</body>
+</html>
