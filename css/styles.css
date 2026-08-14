@@ -724,18 +724,33 @@ body {
   padding-top: 8px;
 }
 
-.reset-button {
+.footer__actions {
+  display: flex;
+  flex-wrap: wrap;
+  justify-content: center;
+  align-items: center;
+  gap: 10px;
   margin-top: 10px;
+}
+
+.reset-button,
+.donate-button {
+  margin-top: 0;
   padding: 6px 14px;
   font-family: inherit;
   font-size: 0.75rem;
   font-weight: 600;
-  color: rgba(247, 243, 255, 0.35);
   background: transparent;
   border: 1px solid rgba(247, 243, 255, 0.18);
   border-radius: 999px;
   cursor: pointer;
+  text-decoration: none;
+  display: inline-block;
   transition: color 150ms ease, border-color 150ms ease, background 150ms ease;
+}
+
+.reset-button {
+  color: rgba(247, 243, 255, 0.35);
 }
 .reset-button:hover,
 .reset-button:focus-visible {
@@ -745,6 +760,21 @@ body {
 }
 .reset-button:focus-visible {
   outline: 2px solid var(--red);
+  outline-offset: 2px;
+}
+
+.donate-button {
+  color: rgba(251, 191, 36, 0.7);
+  border-color: rgba(251, 191, 36, 0.3);
+}
+.donate-button:hover,
+.donate-button:focus-visible {
+  color: var(--gold);
+  border-color: rgba(251, 191, 36, 0.6);
+  background: rgba(251, 191, 36, 0.1);
+}
+.donate-button:focus-visible {
+  outline: 2px solid var(--gold);
   outline-offset: 2px;
 }
 
