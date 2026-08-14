@@ -65,6 +65,47 @@ body {
 .ad-slot--content { max-width: 336px; min-height: 100px; }
 .ad-slot--bottom { min-height: 90px; }
 
+.ad-slot--promo {
+  border-style: solid;
+  border-color: var(--panel-border);
+  background: rgba(124, 58, 237, 0.14);
+  padding: 12px 20px;
+}
+
+.ad-slot__promo-link {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  flex-wrap: wrap;
+  gap: 8px 14px;
+  width: 100%;
+  color: inherit;
+  text-decoration: none;
+  text-transform: none;
+  letter-spacing: normal;
+}
+
+.ad-slot--content .ad-slot__promo-link {
+  flex-direction: column;
+  gap: 4px;
+  text-align: center;
+}
+
+.ad-slot__promo-text {
+  font-size: 0.9rem;
+  color: var(--ink-dim);
+}
+
+.ad-slot__promo-cta {
+  font-size: 0.9rem;
+  font-weight: 600;
+  color: var(--accent-bright);
+}
+
+.ad-slot__promo-link:hover .ad-slot__promo-cta {
+  text-decoration: underline;
+}
+
 /* ---------- Hero ---------- */
 .hero {
   text-align: center;
@@ -722,6 +763,11 @@ body {
   color: rgba(247, 243, 255, 0.4);
   font-size: 0.8rem;
   padding-top: 8px;
+}
+
+.footer__link {
+  color: inherit;
+  text-decoration: underline;
 }
 
 .footer__actions {
