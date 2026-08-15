@@ -42,27 +42,32 @@
       <p class="hero__subtitle">A button that does absolutely nothing important. You will click it anyway.</p>
     </header>
 
-    <!-- 3, 4, 5: The button, counter, and event message -->
-    <section class="click-zone" id="button-stage" aria-live="off">
-      <button id="main-button" class="main-button" type="button" aria-label="Click the button">
-        <span id="button-label" class="main-button__label">CLICK ME</span>
-      </button>
+    <!-- 3, 4, 5, 6: The button/counter/event message, flanked by achievements
+         and sightings on desktop (see .stage-row in styles.css) -->
+    <div class="stage-row">
 
-      <p id="click-counter" class="click-counter">You've clicked: 0 times</p>
-      <p id="event-message" class="event-message" role="status" aria-live="polite"></p>
-    </section>
+      <section class="click-zone" id="button-stage" aria-live="off">
+        <button id="main-button" class="main-button" type="button" aria-label="Click the button">
+          <span id="button-label" class="main-button__label">CLICK ME</span>
+        </button>
 
-    <!-- 6: Achievements -->
-    <section class="panel" aria-labelledby="achievements-heading">
-      <h2 id="achievements-heading" class="panel__heading">Achievements</h2>
-      <ul id="achievements-grid" class="achievements-grid"></ul>
-    </section>
+        <p id="click-counter" class="click-counter">You've clicked: 0 times</p>
+        <p id="event-message" class="event-message" role="status" aria-live="polite"></p>
+      </section>
 
-    <!-- Rare effect sightings -->
-    <section class="panel" aria-labelledby="sightings-heading">
-      <h2 id="sightings-heading" class="panel__heading">Rare Sightings</h2>
-      <ul id="sightings-grid" class="achievements-grid"></ul>
-    </section>
+      <!-- 6: Achievements -->
+      <section class="panel stage-panel stage-panel--achievements" aria-labelledby="achievements-heading">
+        <h2 id="achievements-heading" class="panel__heading">Achievements</h2>
+        <ul id="achievements-grid" class="achievements-grid"></ul>
+      </section>
+
+      <!-- Rare effect sightings -->
+      <section class="panel stage-panel stage-panel--sightings" aria-labelledby="sightings-heading">
+        <h2 id="sightings-heading" class="panel__heading">Rare Sightings</h2>
+        <ul id="sightings-grid" class="achievements-grid"></ul>
+      </section>
+
+    </div>
 
     <!-- Ad slot: in-content (house promo until ads are approved) -->
     <div class="ad-slot ad-slot--content ad-slot--promo">

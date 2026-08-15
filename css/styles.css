@@ -131,6 +131,11 @@ body {
   font-size: clamp(0.95rem, 3vw, 1.1rem);
 }
 
+/* ---------- Stage row (button flanked by achievements/sightings on desktop) ---------- */
+.stage-row {
+  display: contents;
+}
+
 /* ---------- Click zone ---------- */
 .click-zone {
   position: relative;
@@ -567,6 +572,7 @@ body {
 
 /* ---------- Panels ---------- */
 .panel {
+  min-width: 0;
   background: var(--panel-bg);
   border: 1px solid var(--panel-border);
   border-radius: var(--radius-lg);
@@ -596,7 +602,7 @@ body {
   margin: 0;
   padding: 0;
   display: grid;
-  grid-template-columns: repeat(auto-fill, minmax(96px, 1fr));
+  grid-template-columns: repeat(auto-fill, minmax(min(96px, 100%), 1fr));
   gap: 10px;
 }
 .achievement-badge {
@@ -604,6 +610,7 @@ body {
   flex-direction: column;
   align-items: center;
   gap: 4px;
+  min-width: 0;
   padding: 12px 6px;
   border-radius: var(--radius-md);
   background: rgba(255, 255, 255, 0.04);
@@ -883,5 +890,26 @@ body {
   }
   .stats-grid {
     grid-template-columns: repeat(4, 1fr);
+  }
+}
+
+/* ---------- Desktop: achievements/sightings flank the button ---------- */
+@media (min-width: 1080px) {
+  .page {
+    max-width: 1180px;
+  }
+  .stage-row {
+    display: grid;
+    grid-template-columns: 240px 1fr 240px;
+    align-items: start;
+    gap: 28px;
+  }
+  .stage-panel--achievements { order: 1; }
+  #button-stage { order: 2; }
+  .stage-panel--sightings { order: 3; }
+
+  .stage-panel--achievements .achievements-grid,
+  .stage-panel--sightings .achievements-grid {
+    grid-template-columns: repeat(3, 1fr);
   }
 }

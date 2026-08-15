@@ -3,7 +3,7 @@
 export const MILESTONES = [
   { id: "m10", threshold: 10, title: "First Click" },
   { id: "m100", threshold: 100, title: "Baby Blammer" },
-  { id: "m500", threshold: 500, title: "Blam Enthusiast" },
+  { id: "m500", threshold: 500, title: "Blam Fanatic" },
   { id: "m1000", threshold: 1000, title: "Dedicated Blammer" },
   { id: "m1500", threshold: 1500, title: "Suspicious" },
   { id: "m3000", threshold: 3000, title: "Button Pro" },
