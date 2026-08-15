@@ -13,6 +13,7 @@ import { fetchGlobalStats, fetchTeamTotals, fetchLeaderboard } from "./core/api.
 import { track } from "./core/analytics.js";
 
 import { pulseButton, spawnFloatingValue, applyVisualEffect, startColorCycle, tickColorCycle } from "./ui/button.js";
+import { playClickBloop } from "./ui/sound.js";
 import { maybeSpawnBalloon } from "./ui/balloonEffect.js";
 import { maybeSpawnRocket } from "./ui/rocketEffect.js";
 import { maybeSpawnUfo } from "./ui/ufoEffect.js";
@@ -144,6 +145,7 @@ function handleClick(clientX, clientY) {
 
   pulseButton(dom.button);
   spawnFloatingValue(dom.stage, delta, clientX, clientY);
+  playClickBloop();
 
   let sawEffect = false;
 
