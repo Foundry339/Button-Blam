@@ -496,6 +496,46 @@ body {
   100% { opacity: 0; transform: translate(var(--cross-distance, 0px), 0) rotate(-3deg); }
 }
 
+.tropical-fish {
+  position: fixed;
+  left: 0;
+  top: 0;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  line-height: 1;
+  pointer-events: none;
+  opacity: 0;
+  z-index: 20;
+  filter: drop-shadow(0 10px 18px rgba(0, 0, 0, 0.35));
+}
+.tropical-fish.is-swimming {
+  animation: fish-swim-kf var(--fish-duration, 2600ms) ease-in forwards;
+}
+@keyframes fish-swim-kf {
+  /* The fish emoji faces left by default, so swimming rightward off-screen
+     needs the horizontal flip - same trick as the duck's ltr crossing. */
+  0% { opacity: 0; transform: translate(-50%, -50%) scaleX(-1) scale(0.3) rotate(6deg); }
+  10% { opacity: 1; transform: translate(-50%, -50%) scaleX(-1) scale(1) rotate(0deg); }
+  35% {
+    transform: translate(calc(-50% + var(--fish-distance, 800px) * 0.35), calc(-50% - 20px))
+      scaleX(-1) rotate(4deg);
+  }
+  60% {
+    transform: translate(calc(-50% + var(--fish-distance, 800px) * 0.6), calc(-50% + 16px))
+      scaleX(-1) rotate(-4deg);
+  }
+  88% {
+    opacity: 1;
+    transform: translate(calc(-50% + var(--fish-distance, 800px) * 0.88), calc(-50% - 8px))
+      scaleX(-1) rotate(3deg);
+  }
+  100% {
+    opacity: 0;
+    transform: translate(calc(-50% + var(--fish-distance, 800px)), calc(-50% + 4px)) scaleX(-1) rotate(0deg);
+  }
+}
+
 .fire-particle {
   position: absolute;
   transform: translate(-50%, -50%);
@@ -513,6 +553,27 @@ body {
     opacity: 0;
     transform: translate(calc(-50% + var(--fire-drift, 0px)), calc(-50% + var(--fire-rise, -120px))) scale(0.9)
       rotate(8deg);
+  }
+}
+
+.bubble-particle {
+  position: absolute;
+  transform: translate(-50%, -50%);
+  pointer-events: none;
+  line-height: 1;
+  z-index: 6;
+  filter: brightness(1.35) saturate(1.4) drop-shadow(0 0 6px rgba(165, 243, 252, 0.65));
+  animation-name: bubble-pop-kf;
+  animation-timing-function: ease-out;
+  animation-fill-mode: forwards;
+}
+@keyframes bubble-pop-kf {
+  0% { opacity: 0; transform: translate(-50%, -50%) translate(0, 0) scale(0.4); }
+  15% { opacity: 1; }
+  70% { opacity: 1; }
+  100% {
+    opacity: 0;
+    transform: translate(-50%, -50%) translate(var(--bubble-tx, 0px), var(--bubble-ty, 0px)) scale(1.1);
   }
 }
 
@@ -603,7 +664,7 @@ body {
   margin: 0;
   padding: 0;
   display: grid;
-  grid-template-columns: repeat(auto-fill, minmax(min(96px, 100%), 1fr));
+  grid-template-columns: repeat(3, 1fr);
   gap: 10px;
 }
 .achievement-badge {
@@ -908,9 +969,4 @@ body {
   .stage-panel--achievements { order: 1; }
   #button-stage { order: 2; }
   .stage-panel--sightings { order: 3; }
-
-  .stage-panel--achievements .achievements-grid,
-  .stage-panel--sightings .achievements-grid {
-    grid-template-columns: repeat(3, 1fr);
-  }
 }

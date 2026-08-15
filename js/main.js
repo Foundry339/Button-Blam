@@ -19,6 +19,7 @@ import { maybeSpawnUfo } from "./ui/ufoEffect.js";
 import { maybeSpawnDuck } from "./ui/duckEffect.js";
 import { maybeSpawnFire } from "./ui/fireEffect.js";
 import { maybeSpawnDonutRain } from "./ui/donutEffect.js";
+import { maybeTriggerFishPowerUp, spawnFishSwimOut, spawnBubbleBurst, BUBBLE_POWER_UP_CLICKS } from "./ui/bubbleEffect.js";
 import { renderCounter } from "./ui/counter.js";
 import { showMessage } from "./ui/messageBanner.js";
 import { showAchievementToast } from "./ui/achievementToast.js";
@@ -68,6 +69,9 @@ const userTeam = loadOrAssignTeam();
 let sessionClicks = 0;
 let teamTotals = { red: 0, blue: 0 };
 let leaderboardEntries = [];
+// Not persisted - a refresh mid-power-up just ends it early, which is fine
+// for a bonus phase like this.
+let bubblePowerUpClicksRemaining = 0;
 
 function renderPersonal() {
   renderCounter(dom.counter, stats.totalClicks);
@@ -139,30 +143,45 @@ function handleClick(clientX, clientY) {
   spawnFloatingValue(dom.stage, delta, clientX, clientY);
 
   let sawEffect = false;
-  if (maybeSpawnBalloon(dom.stage, dom.button)) {
-    recordSighting(sightingCounts, "balloon");
+
+  // Fish can only be sighted between power-ups - finding one while bubbles
+  // are already going wouldn't mean anything. The fish itself is the whole
+  // spectacle on this click; bubbles start on the clicks after it.
+  if (bubblePowerUpClicksRemaining <= 0 && maybeTriggerFishPowerUp()) {
+    recordSighting(sightingCounts, "fish");
     sawEffect = true;
-  }
-  if (maybeSpawnRocket(dom.stage, dom.button)) {
-    recordSighting(sightingCounts, "rocket");
-    sawEffect = true;
-  }
-  if (maybeSpawnUfo(dom.stage, dom.button, dom.buttonLabel)) {
-    recordSighting(sightingCounts, "ufo");
-    sawEffect = true;
-  }
-  if (maybeSpawnDuck(dom.stage, dom.button)) {
-    recordSighting(sightingCounts, "duck");
-    sawEffect = true;
-  }
-  if (maybeSpawnFire(dom.stage, dom.button)) {
-    recordSighting(sightingCounts, "fire");
-    sawEffect = true;
-    startColorCycle();
-  }
-  if (maybeSpawnDonutRain()) {
-    recordSighting(sightingCounts, "donut");
-    sawEffect = true;
+    spawnFishSwimOut(dom.button);
+    bubblePowerUpClicksRemaining = BUBBLE_POWER_UP_CLICKS;
+  } else if (bubblePowerUpClicksRemaining > 0) {
+    // Bubbles crowd out every other sighting for the duration of the power-up.
+    spawnBubbleBurst(dom.stage, dom.button);
+    bubblePowerUpClicksRemaining -= 1;
+  } else {
+    if (maybeSpawnBalloon(dom.stage, dom.button)) {
+      recordSighting(sightingCounts, "balloon");
+      sawEffect = true;
+    }
+    if (maybeSpawnRocket(dom.stage, dom.button)) {
+      recordSighting(sightingCounts, "rocket");
+      sawEffect = true;
+    }
+    if (maybeSpawnUfo(dom.stage, dom.button, dom.buttonLabel)) {
+      recordSighting(sightingCounts, "ufo");
+      sawEffect = true;
+    }
+    if (maybeSpawnDuck(dom.stage, dom.button)) {
+      recordSighting(sightingCounts, "duck");
+      sawEffect = true;
+    }
+    if (maybeSpawnFire(dom.stage, dom.button)) {
+      recordSighting(sightingCounts, "fire");
+      sawEffect = true;
+      startColorCycle();
+    }
+    if (maybeSpawnDonutRain()) {
+      recordSighting(sightingCounts, "donut");
+      sawEffect = true;
+    }
   }
   if (sawEffect) renderSightingsGrid(dom.sightingsGrid, sightingCounts);
 
