@@ -20,6 +20,7 @@ import { maybeSpawnDuck } from "./ui/duckEffect.js";
 import { maybeSpawnFire } from "./ui/fireEffect.js";
 import { maybeSpawnDonutRain } from "./ui/donutEffect.js";
 import { maybeTriggerFishPowerUp, spawnFishSwimOut, spawnBubbleBurst, BUBBLE_POWER_UP_CLICKS } from "./ui/bubbleEffect.js";
+import { maybeTriggerStormPowerUp, spawnStormCloudReveal, spawnLightningBurst, spawnRainDrizzle, STORM_POWER_UP_CLICKS } from "./ui/stormEffect.js";
 import { renderCounter } from "./ui/counter.js";
 import { showMessage } from "./ui/messageBanner.js";
 import { showAchievementToast } from "./ui/achievementToast.js";
@@ -72,6 +73,7 @@ let leaderboardEntries = [];
 // Not persisted - a refresh mid-power-up just ends it early, which is fine
 // for a bonus phase like this.
 let bubblePowerUpClicksRemaining = 0;
+let stormPowerUpClicksRemaining = 0;
 
 function renderPersonal() {
   renderCounter(dom.counter, stats.totalClicks);
@@ -144,18 +146,31 @@ function handleClick(clientX, clientY) {
 
   let sawEffect = false;
 
-  // Fish can only be sighted between power-ups - finding one while bubbles
-  // are already going wouldn't mean anything. The fish itself is the whole
-  // spectacle on this click; bubbles start on the clicks after it.
-  if (bubblePowerUpClicksRemaining <= 0 && maybeTriggerFishPowerUp()) {
+  // Fish/storm can only be sighted between power-ups, and only one power-up
+  // runs at a time - bubbles and lightning both going at once would just be
+  // visual noise. Each sighting itself is the whole spectacle on its click;
+  // the guaranteed effect starts on the clicks after it.
+  const powerUpActive = bubblePowerUpClicksRemaining > 0 || stormPowerUpClicksRemaining > 0;
+
+  if (!powerUpActive && maybeTriggerFishPowerUp()) {
     recordSighting(sightingCounts, "fish");
     sawEffect = true;
     spawnFishSwimOut(dom.button);
     bubblePowerUpClicksRemaining = BUBBLE_POWER_UP_CLICKS;
+  } else if (!powerUpActive && maybeTriggerStormPowerUp()) {
+    recordSighting(sightingCounts, "storm");
+    sawEffect = true;
+    spawnStormCloudReveal(dom.button);
+    stormPowerUpClicksRemaining = STORM_POWER_UP_CLICKS;
   } else if (bubblePowerUpClicksRemaining > 0) {
     // Bubbles crowd out every other sighting for the duration of the power-up.
     spawnBubbleBurst(dom.stage, dom.button);
     bubblePowerUpClicksRemaining -= 1;
+  } else if (stormPowerUpClicksRemaining > 0) {
+    // Same deal for lightning, plus a scattering of rain alongside it.
+    spawnLightningBurst(dom.stage, dom.button);
+    spawnRainDrizzle(dom.stage, dom.button);
+    stormPowerUpClicksRemaining -= 1;
   } else {
     if (maybeSpawnBalloon(dom.stage, dom.button)) {
       recordSighting(sightingCounts, "balloon");
