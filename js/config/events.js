@@ -40,5 +40,6 @@ export const BUTTON_TEXT_SWAPS = [
   "ONE MORE.",
   "AGAIN.",
   "FEED ME",
+  "BLAM!",
   "I DARE YOU",
 ];
