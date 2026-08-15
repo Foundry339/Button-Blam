@@ -19,6 +19,7 @@ import { maybeSpawnUfo } from "./ui/ufoEffect.js";
 import { maybeSpawnDuck } from "./ui/duckEffect.js";
 import { maybeSpawnFire } from "./ui/fireEffect.js";
 import { maybeSpawnDonutRain } from "./ui/donutEffect.js";
+import { maybeSpawnEgg } from "./ui/eggEffect.js";
 import { maybeTriggerFishPowerUp, spawnFishSwimOut, spawnBubbleBurst, BUBBLE_POWER_UP_CLICKS } from "./ui/bubbleEffect.js";
 import { maybeTriggerStormPowerUp, spawnStormCloudReveal, spawnLightningBurst, spawnRainDrizzle, STORM_POWER_UP_CLICKS } from "./ui/stormEffect.js";
 import { renderCounter } from "./ui/counter.js";
@@ -195,6 +196,10 @@ function handleClick(clientX, clientY) {
     }
     if (maybeSpawnDonutRain()) {
       recordSighting(sightingCounts, "donut");
+      sawEffect = true;
+    }
+    if (maybeSpawnEgg(dom.stage, dom.button)) {
+      recordSighting(sightingCounts, "egg");
       sawEffect = true;
     }
   }
