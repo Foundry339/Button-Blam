@@ -13,7 +13,7 @@ import { fetchGlobalStats, fetchTeamTotals, fetchLeaderboard } from "./core/api.
 import { track } from "./core/analytics.js";
 
 import { pulseButton, punchButton, spawnFloatingValue, applyVisualEffect, startColorCycle, tickColorCycle } from "./ui/button.js";
-import { playClickBloop, playPunchThump } from "./ui/sound.js";
+import { playClickBloop, playPunchThump, playPhoenixSizzle } from "./ui/sound.js";
 import { maybeSpawnBalloon } from "./ui/balloonEffect.js";
 import { maybeSpawnRocket } from "./ui/rocketEffect.js";
 import { maybeSpawnUfo } from "./ui/ufoEffect.js";
@@ -25,6 +25,7 @@ import { maybeTriggerFishPowerUp, spawnFishSwimOut, spawnBubbleBurst, BUBBLE_POW
 import { maybeTriggerStormPowerUp, spawnStormCloudReveal, spawnLightningBurst, spawnRainDrizzle, STORM_POWER_UP_CLICKS } from "./ui/stormEffect.js";
 import { maybeTriggerDiscoPowerUp, spawnDiscoBallReveal, spawnStrobeBurst, DISCO_POWER_UP_CLICKS } from "./ui/discoEffect.js";
 import { maybeTriggerMoaiPowerUp, spawnMoaiSlamReveal, spawnClickImpact, MOAI_POWER_UP_CLICKS } from "./ui/moaiEffect.js";
+import { maybeTriggerPhoenixPowerUp, spawnPhoenixRebirth, spawnEmberFloatingValue, PHOENIX_POWER_UP_CLICKS } from "./ui/phoenixEffect.js";
 import { renderCounter } from "./ui/counter.js";
 import { showMessage } from "./ui/messageBanner.js";
 import { showAchievementToast } from "./ui/achievementToast.js";
@@ -81,6 +82,7 @@ let bubblePowerUpClicksRemaining = 0;
 let stormPowerUpClicksRemaining = 0;
 let discoPowerUpClicksRemaining = 0;
 let moaiPowerUpClicksRemaining = 0;
+let phoenixPowerUpClicksRemaining = 0;
 
 function renderPersonal() {
   renderCounter(dom.counter, stats.totalClicks);
@@ -149,27 +151,36 @@ function handleClick(clientX, clientY) {
   stats = applyClick(stats, delta, sessionClicks);
 
   pulseButton(dom.button);
-  spawnFloatingValue(dom.stage, delta, clientX, clientY);
-  // Swap in a punchy thump for the click sound itself while moai's punches
-  // are landing, back to the normal bloop once the power-up ends.
+  // Swap in the flame-colored "+N" and ember trail while phoenix's power-up
+  // is active, back to the normal gold pop once it ends.
+  if (phoenixPowerUpClicksRemaining > 0) {
+    spawnEmberFloatingValue(dom.stage, delta, clientX, clientY);
+  } else {
+    spawnFloatingValue(dom.stage, delta, clientX, clientY);
+  }
+  // Swap in a punchy thump for moai's punches or a sizzle for phoenix's
+  // embers, back to the normal bloop once whichever power-up ends.
   if (moaiPowerUpClicksRemaining > 0) {
     playPunchThump();
+  } else if (phoenixPowerUpClicksRemaining > 0) {
+    playPhoenixSizzle();
   } else {
     playClickBloop();
   }
 
   let sawEffect = false;
 
-  // Fish/storm/disco/moai can only be sighted between power-ups, and only
-  // one power-up runs at a time - bubbles, lightning, strobing, and punches
-  // all going at once would just be visual noise. Each sighting itself is
-  // the whole spectacle on its click; the guaranteed effect starts on the
-  // clicks after it.
+  // Fish/storm/disco/moai/phoenix can only be sighted between power-ups,
+  // and only one power-up runs at a time - bubbles, lightning, strobing,
+  // punches, and embers all going at once would just be visual noise. Each
+  // sighting itself is the whole spectacle on its click; the guaranteed
+  // effect starts on the clicks after it.
   const powerUpActive =
     bubblePowerUpClicksRemaining > 0 ||
     stormPowerUpClicksRemaining > 0 ||
     discoPowerUpClicksRemaining > 0 ||
-    moaiPowerUpClicksRemaining > 0;
+    moaiPowerUpClicksRemaining > 0 ||
+    phoenixPowerUpClicksRemaining > 0;
 
   if (!powerUpActive && maybeTriggerFishPowerUp()) {
     recordSighting(sightingCounts, "fish");
@@ -191,6 +202,11 @@ function handleClick(clientX, clientY) {
     sawEffect = true;
     spawnMoaiSlamReveal(dom.button);
     moaiPowerUpClicksRemaining = MOAI_POWER_UP_CLICKS;
+  } else if (!powerUpActive && maybeTriggerPhoenixPowerUp()) {
+    recordSighting(sightingCounts, "phoenix");
+    sawEffect = true;
+    spawnPhoenixRebirth(dom.button);
+    phoenixPowerUpClicksRemaining = PHOENIX_POWER_UP_CLICKS;
   } else if (bubblePowerUpClicksRemaining > 0) {
     // Bubbles crowd out every other sighting for the duration of the power-up.
     spawnBubbleBurst(dom.stage, dom.button);
@@ -209,6 +225,10 @@ function handleClick(clientX, clientY) {
     punchButton(dom.button);
     spawnClickImpact(clientX, clientY);
     moaiPowerUpClicksRemaining -= 1;
+  } else if (phoenixPowerUpClicksRemaining > 0) {
+    // The ember floating value swap above already delivers this click's
+    // effect - just count it down here.
+    phoenixPowerUpClicksRemaining -= 1;
   } else {
     if (maybeSpawnBalloon(dom.stage, dom.button)) {
       recordSighting(sightingCounts, "balloon");
