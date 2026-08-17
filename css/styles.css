@@ -727,6 +727,31 @@ body {
   }
 }
 
+.confetti-rain-layer {
+  position: fixed;
+  inset: 0;
+  overflow: hidden;
+  pointer-events: none;
+  z-index: 40;
+}
+.confetti-piece {
+  position: absolute;
+  top: -20px;
+  opacity: 0;
+  border-radius: 2px;
+  animation-name: confetti-fall-kf;
+  animation-timing-function: linear;
+  animation-fill-mode: forwards;
+}
+@keyframes confetti-fall-kf {
+  0% { opacity: 0; transform: translate(0, 0) rotate(0deg); }
+  6% { opacity: 1; }
+  100% {
+    opacity: 1;
+    transform: translate(var(--confetti-drift, 0px), calc(100vh + 40px)) rotate(var(--confetti-spin, 360deg));
+  }
+}
+
 .donut-rain-layer {
   position: fixed;
   inset: 0;

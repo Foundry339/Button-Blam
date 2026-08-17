@@ -26,6 +26,7 @@ import { maybeTriggerStormPowerUp, spawnStormCloudReveal, spawnLightningBurst, s
 import { renderCounter } from "./ui/counter.js";
 import { showMessage } from "./ui/messageBanner.js";
 import { showAchievementToast } from "./ui/achievementToast.js";
+import { spawnConfettiRain } from "./ui/confettiEffect.js";
 import { renderAchievementsGrid } from "./ui/achievementsPanel.js";
 import { renderSightingsGrid } from "./ui/sightingsPanel.js";
 import { renderPersonalStats } from "./ui/statsPanel.js";
@@ -229,6 +230,7 @@ function handleClick(clientX, clientY) {
   newlyUnlocked.forEach((milestone, i) => {
     window.setTimeout(() => {
       showAchievementToast(dom.toastContainer, milestone);
+      spawnConfettiRain();
       track("milestone_reached", { id: milestone.id, threshold: milestone.threshold });
       track("achievement_unlocked", { id: milestone.id, title: milestone.title });
     }, i * 700);
