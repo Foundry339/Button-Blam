@@ -13,7 +13,7 @@ const MAX_SPARKLES = 26;
 let activeEggs = 0;
 
 /** Roll the dice; spawn the golden egg sequence near the button if it hits. Returns whether it fired. */
-export function maybeSpawnEgg(stageEl, buttonEl, chance = 1 / 5000) {
+export function maybeSpawnEgg(stageEl, buttonEl, chance = 1 / 3000) {
   if (activeEggs >= MAX_ACTIVE_EGGS) return false;
   if (Math.random() > chance) return false;
   spawnEggSequence(stageEl, buttonEl);
