@@ -12,8 +12,8 @@ import { loadOrAssignTeam, loadLocalTallyDelta, addToLocalTally } from "./core/t
 import { fetchGlobalStats, fetchTeamTotals, fetchLeaderboard } from "./core/api.js";
 import { track } from "./core/analytics.js";
 
-import { pulseButton, spawnFloatingValue, applyVisualEffect, startColorCycle, tickColorCycle } from "./ui/button.js";
-import { playClickBloop } from "./ui/sound.js";
+import { pulseButton, punchButton, spawnFloatingValue, applyVisualEffect, startColorCycle, tickColorCycle } from "./ui/button.js";
+import { playClickBloop, playPunchThump } from "./ui/sound.js";
 import { maybeSpawnBalloon } from "./ui/balloonEffect.js";
 import { maybeSpawnRocket } from "./ui/rocketEffect.js";
 import { maybeSpawnUfo } from "./ui/ufoEffect.js";
@@ -23,6 +23,8 @@ import { maybeSpawnDonutRain } from "./ui/donutEffect.js";
 import { maybeSpawnEgg } from "./ui/eggEffect.js";
 import { maybeTriggerFishPowerUp, spawnFishSwimOut, spawnBubbleBurst, BUBBLE_POWER_UP_CLICKS } from "./ui/bubbleEffect.js";
 import { maybeTriggerStormPowerUp, spawnStormCloudReveal, spawnLightningBurst, spawnRainDrizzle, STORM_POWER_UP_CLICKS } from "./ui/stormEffect.js";
+import { maybeTriggerDiscoPowerUp, spawnDiscoBallReveal, spawnStrobeBurst, DISCO_POWER_UP_CLICKS } from "./ui/discoEffect.js";
+import { maybeTriggerMoaiPowerUp, spawnMoaiSlamReveal, spawnClickImpact, MOAI_POWER_UP_CLICKS } from "./ui/moaiEffect.js";
 import { renderCounter } from "./ui/counter.js";
 import { showMessage } from "./ui/messageBanner.js";
 import { showAchievementToast } from "./ui/achievementToast.js";
@@ -77,6 +79,8 @@ let leaderboardEntries = [];
 // for a bonus phase like this.
 let bubblePowerUpClicksRemaining = 0;
 let stormPowerUpClicksRemaining = 0;
+let discoPowerUpClicksRemaining = 0;
+let moaiPowerUpClicksRemaining = 0;
 
 function renderPersonal() {
   renderCounter(dom.counter, stats.totalClicks);
@@ -146,15 +150,26 @@ function handleClick(clientX, clientY) {
 
   pulseButton(dom.button);
   spawnFloatingValue(dom.stage, delta, clientX, clientY);
-  playClickBloop();
+  // Swap in a punchy thump for the click sound itself while moai's punches
+  // are landing, back to the normal bloop once the power-up ends.
+  if (moaiPowerUpClicksRemaining > 0) {
+    playPunchThump();
+  } else {
+    playClickBloop();
+  }
 
   let sawEffect = false;
 
-  // Fish/storm can only be sighted between power-ups, and only one power-up
-  // runs at a time - bubbles and lightning both going at once would just be
-  // visual noise. Each sighting itself is the whole spectacle on its click;
-  // the guaranteed effect starts on the clicks after it.
-  const powerUpActive = bubblePowerUpClicksRemaining > 0 || stormPowerUpClicksRemaining > 0;
+  // Fish/storm/disco/moai can only be sighted between power-ups, and only
+  // one power-up runs at a time - bubbles, lightning, strobing, and punches
+  // all going at once would just be visual noise. Each sighting itself is
+  // the whole spectacle on its click; the guaranteed effect starts on the
+  // clicks after it.
+  const powerUpActive =
+    bubblePowerUpClicksRemaining > 0 ||
+    stormPowerUpClicksRemaining > 0 ||
+    discoPowerUpClicksRemaining > 0 ||
+    moaiPowerUpClicksRemaining > 0;
 
   if (!powerUpActive && maybeTriggerFishPowerUp()) {
     recordSighting(sightingCounts, "fish");
@@ -166,6 +181,16 @@ function handleClick(clientX, clientY) {
     sawEffect = true;
     spawnStormCloudReveal(dom.button);
     stormPowerUpClicksRemaining = STORM_POWER_UP_CLICKS;
+  } else if (!powerUpActive && maybeTriggerDiscoPowerUp()) {
+    recordSighting(sightingCounts, "disco");
+    sawEffect = true;
+    spawnDiscoBallReveal(dom.button);
+    discoPowerUpClicksRemaining = DISCO_POWER_UP_CLICKS;
+  } else if (!powerUpActive && maybeTriggerMoaiPowerUp()) {
+    recordSighting(sightingCounts, "moai");
+    sawEffect = true;
+    spawnMoaiSlamReveal(dom.button);
+    moaiPowerUpClicksRemaining = MOAI_POWER_UP_CLICKS;
   } else if (bubblePowerUpClicksRemaining > 0) {
     // Bubbles crowd out every other sighting for the duration of the power-up.
     spawnBubbleBurst(dom.stage, dom.button);
@@ -175,6 +200,15 @@ function handleClick(clientX, clientY) {
     spawnLightningBurst(dom.stage, dom.button);
     spawnRainDrizzle(dom.stage, dom.button);
     stormPowerUpClicksRemaining -= 1;
+  } else if (discoPowerUpClicksRemaining > 0) {
+    // Same deal for the strobe.
+    spawnStrobeBurst(dom.stage, dom.button);
+    discoPowerUpClicksRemaining -= 1;
+  } else if (moaiPowerUpClicksRemaining > 0) {
+    // Same deal for the punch - lands right where the user clicked.
+    punchButton(dom.button);
+    spawnClickImpact(clientX, clientY);
+    moaiPowerUpClicksRemaining -= 1;
   } else {
     if (maybeSpawnBalloon(dom.stage, dom.button)) {
       recordSighting(sightingCounts, "balloon");

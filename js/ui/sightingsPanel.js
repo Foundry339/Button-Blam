@@ -10,6 +10,9 @@ const SIGHTINGS = [
   { id: "fish", icon: "\u{1F420}", title: "Fish" },
   { id: "storm", icon: "\u{1F329}\u{FE0F}", title: "Storm" },
   { id: "egg", icon: "\u{1F95A}", title: "Egg" },
+  { id: "disco", icon: "\u{1FAA9}", title: "Disco" },
+  { id: "moai", icon: "\u{1F5FF}", title: "Moai" },
+  { id: "phoenix", icon: "\u{1F426}\u{200D}\u{1F525}", title: "Phoenix" },
 ];
 
 /** Renders the grid of rare-effect sighting counters, reusing the achievement badge look. */

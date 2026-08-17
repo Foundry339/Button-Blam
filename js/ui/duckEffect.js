@@ -8,7 +8,7 @@ const DUCK_EMOJI = "\u{1F986}";
 let activeDucks = 0;
 
 /** Roll the dice; send a big rubber duck drifting across the screen if it hits. Returns whether it fired. */
-export function maybeSpawnDuck(stageEl, buttonEl, chance = 0.01) {
+export function maybeSpawnDuck(stageEl, buttonEl, chance = 1 / 150) {
   if (activeDucks >= MAX_ACTIVE_DUCKS) return false;
   if (Math.random() > chance) return false;
   spawnDuck(stageEl, buttonEl);

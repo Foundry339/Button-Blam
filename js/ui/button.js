@@ -13,6 +13,13 @@ export function pulseButton(buttonEl) {
   buttonEl.classList.add("btn-pulse");
 }
 
+/** Knock-back recoil, used during the moai punch power-up. */
+export function punchButton(buttonEl) {
+  buttonEl.classList.remove("btn-punch");
+  void buttonEl.offsetWidth;
+  buttonEl.classList.add("btn-punch");
+}
+
 /** Floating "+N" text that rises and fades near the click point. */
 export function spawnFloatingValue(stageEl, value, clientX, clientY) {
   const el = document.createElement("span");
