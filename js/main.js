@@ -3,6 +3,15 @@
 // else stays focused on one concern (data, game logic, or rendering).
 import { MILESTONES } from "./config/milestones.js";
 
+// These milestones rain hamburgers instead of the usual confetti.
+const HAMBURGER_RAIN_THRESHOLDS = new Set([1000, 1500, 3000]);
+// These milestones rain gemstones instead of the usual confetti.
+const GEM_RAIN_THRESHOLDS = new Set([6500, 15000, 30000]);
+// The top milestone rains partying faces instead of the usual confetti.
+const PARTY_RAIN_THRESHOLDS = new Set([1000000]);
+// These milestones rain money bags instead of the usual confetti.
+const MONEY_RAIN_THRESHOLDS = new Set([50000, 500000]);
+
 import { rollEvent } from "./core/clickEngine.js";
 import { loadUnlockedAchievements, checkNewlyUnlocked } from "./core/achievementEngine.js";
 import { loadSightingCounts, recordSighting } from "./core/sightingsEngine.js";
@@ -30,6 +39,10 @@ import { renderCounter } from "./ui/counter.js";
 import { showMessage } from "./ui/messageBanner.js";
 import { showAchievementToast } from "./ui/achievementToast.js";
 import { spawnConfettiRain } from "./ui/confettiEffect.js";
+import { spawnHamburgerRain } from "./ui/hamburgerRainEffect.js";
+import { spawnGemRain } from "./ui/gemRainEffect.js";
+import { spawnPartyRain } from "./ui/partyRainEffect.js";
+import { spawnMoneyRain } from "./ui/moneyRainEffect.js";
 import { renderAchievementsGrid } from "./ui/achievementsPanel.js";
 import { renderSightingsGrid } from "./ui/sightingsPanel.js";
 import { renderPersonalStats } from "./ui/statsPanel.js";
@@ -284,7 +297,17 @@ function handleClick(clientX, clientY) {
   newlyUnlocked.forEach((milestone, i) => {
     window.setTimeout(() => {
       showAchievementToast(dom.toastContainer, milestone);
-      spawnConfettiRain();
+      if (HAMBURGER_RAIN_THRESHOLDS.has(milestone.threshold)) {
+        spawnHamburgerRain();
+      } else if (GEM_RAIN_THRESHOLDS.has(milestone.threshold)) {
+        spawnGemRain();
+      } else if (PARTY_RAIN_THRESHOLDS.has(milestone.threshold)) {
+        spawnPartyRain();
+      } else if (MONEY_RAIN_THRESHOLDS.has(milestone.threshold)) {
+        spawnMoneyRain();
+      } else {
+        spawnConfettiRain();
+      }
       track("milestone_reached", { id: milestone.id, threshold: milestone.threshold });
       track("achievement_unlocked", { id: milestone.id, title: milestone.title });
     }, i * 700);

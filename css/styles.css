@@ -990,6 +990,106 @@ body {
   }
 }
 
+.hamburger-rain-layer {
+  position: fixed;
+  inset: 0;
+  overflow: hidden;
+  pointer-events: none;
+  z-index: 40;
+}
+.hamburger-rain-particle {
+  position: absolute;
+  top: -40px;
+  opacity: 0;
+  line-height: 1;
+  animation-name: hamburger-fall-kf;
+  animation-timing-function: linear;
+  animation-fill-mode: forwards;
+}
+@keyframes hamburger-fall-kf {
+  0% { opacity: 0; transform: translate(0, 0) rotate(0deg); }
+  6% { opacity: 1; }
+  100% {
+    opacity: 1;
+    transform: translate(var(--hamburger-drift, 0px), calc(100dvh + 60px)) rotate(var(--hamburger-spin, 360deg));
+  }
+}
+
+.gem-rain-layer {
+  position: fixed;
+  inset: 0;
+  overflow: hidden;
+  pointer-events: none;
+  z-index: 40;
+}
+.gem-rain-particle {
+  position: absolute;
+  top: -40px;
+  opacity: 0;
+  line-height: 1;
+  animation-name: gem-fall-kf;
+  animation-timing-function: linear;
+  animation-fill-mode: forwards;
+}
+@keyframes gem-fall-kf {
+  0% { opacity: 0; transform: translate(0, 0) rotate(0deg); }
+  6% { opacity: 1; }
+  100% {
+    opacity: 1;
+    transform: translate(var(--gem-drift, 0px), calc(100dvh + 60px)) rotate(var(--gem-spin, 360deg));
+  }
+}
+
+.party-rain-layer {
+  position: fixed;
+  inset: 0;
+  overflow: hidden;
+  pointer-events: none;
+  z-index: 40;
+}
+.party-rain-particle {
+  position: absolute;
+  top: -40px;
+  opacity: 0;
+  line-height: 1;
+  animation-name: party-fall-kf;
+  animation-timing-function: linear;
+  animation-fill-mode: forwards;
+}
+@keyframes party-fall-kf {
+  0% { opacity: 0; transform: translate(0, 0) rotate(0deg); }
+  6% { opacity: 1; }
+  100% {
+    opacity: 1;
+    transform: translate(var(--party-drift, 0px), calc(100dvh + 60px)) rotate(var(--party-spin, 360deg));
+  }
+}
+
+.money-rain-layer {
+  position: fixed;
+  inset: 0;
+  overflow: hidden;
+  pointer-events: none;
+  z-index: 40;
+}
+.money-rain-particle {
+  position: absolute;
+  top: -40px;
+  opacity: 0;
+  line-height: 1;
+  animation-name: money-fall-kf;
+  animation-timing-function: linear;
+  animation-fill-mode: forwards;
+}
+@keyframes money-fall-kf {
+  0% { opacity: 0; transform: translate(0, 0) rotate(0deg); }
+  6% { opacity: 1; }
+  100% {
+    opacity: 1;
+    transform: translate(var(--money-drift, 0px), calc(100dvh + 60px)) rotate(var(--money-spin, 360deg));
+  }
+}
+
 .click-counter {
   margin: 0;
   font-size: clamp(1.05rem, 4vw, 1.3rem);
