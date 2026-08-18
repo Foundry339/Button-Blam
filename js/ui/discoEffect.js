@@ -3,7 +3,7 @@
 // a strobe of colored light beams flashing out from behind the button.
 // Mirrors the tropical fish/bubble and storm cloud/lightning power-ups.
 
-const DISCO_CHANCE = 1 / 5500;
+const DISCO_CHANCE = 1 / 4000;
 export const DISCO_POWER_UP_CLICKS = 50;
 
 const DISCO_EMOJI = "\u{1FAA9}";
