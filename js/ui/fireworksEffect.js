@@ -5,8 +5,8 @@
 
 const FIREWORK_COLORS = ["#ff5964", "#ffcc00", "#5ce1e6", "#7cff6b", "#ff8bd1", "#ffffff"];
 const MAX_ACTIVE_SHOWS = 2;
-const MIN_SHELLS = 4;
-const MAX_SHELLS = 6;
+const MIN_SHELLS = 8;
+const MAX_SHELLS = 10;
 const MIN_PARTICLES = 26;
 const MAX_PARTICLES = 34;
 const LAUNCH_WINDOW_MS = 1400;
