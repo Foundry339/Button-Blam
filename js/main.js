@@ -11,6 +11,9 @@ const GEM_RAIN_THRESHOLDS = new Set([6500, 15000, 30000]);
 const PARTY_RAIN_THRESHOLDS = new Set([1000000]);
 // These milestones rain money bags instead of the usual confetti.
 const MONEY_RAIN_THRESHOLDS = new Set([50000, 500000]);
+// Every 1,000 clicks gets a fireworks show, except thresholds that already
+// have their own milestone achievement + rain effect.
+const MILESTONE_THRESHOLDS = new Set(MILESTONES.map((m) => m.threshold));
 
 import { rollEvent } from "./core/clickEngine.js";
 import { loadUnlockedAchievements, checkNewlyUnlocked } from "./core/achievementEngine.js";
@@ -43,6 +46,7 @@ import { spawnHamburgerRain } from "./ui/hamburgerRainEffect.js";
 import { spawnGemRain } from "./ui/gemRainEffect.js";
 import { spawnPartyRain } from "./ui/partyRainEffect.js";
 import { spawnMoneyRain } from "./ui/moneyRainEffect.js";
+import { spawnFireworks } from "./ui/fireworksEffect.js";
 import { renderAchievementsGrid } from "./ui/achievementsPanel.js";
 import { renderSightingsGrid } from "./ui/sightingsPanel.js";
 import { renderPersonalStats } from "./ui/statsPanel.js";
@@ -315,6 +319,13 @@ function handleClick(clientX, clientY) {
   if (newlyUnlocked.length) {
     renderAchievementsGrid(dom.achievementsGrid, MILESTONES, unlockedAchievements);
     renderPersonal();
+  }
+
+  // Relies on delta always being 1 (see above) so totalClicks never skips
+  // past a multiple of 1000.
+  if (stats.totalClicks % 1000 === 0 && !MILESTONE_THRESHOLDS.has(stats.totalClicks)) {
+    spawnFireworks();
+    track("fireworks_triggered", { totalClicks: stats.totalClicks });
   }
 }
 
