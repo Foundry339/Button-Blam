@@ -3,7 +3,7 @@
 // impact wherever the button gets clicked. Mirrors the tropical fish/bubble,
 // storm cloud/lightning, and disco ball/strobe power-ups.
 
-const MOAI_CHANCE = 1 / 5000;
+const MOAI_CHANCE = 1 / 2000;
 export const MOAI_POWER_UP_CLICKS = 25;
 
 const MOAI_EMOJI = "\u{1F5FF}";

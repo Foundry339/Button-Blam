@@ -3,7 +3,7 @@
 // guarantee a crackle of lightning bolts around the button. Mirrors the
 // tropical fish/bubble power-up in bubbleEffect.js, just reskinned.
 
-const STORM_CHANCE = 1 / 2500;
+const STORM_CHANCE = 1 / 700;
 export const STORM_POWER_UP_CLICKS = 30;
 
 const CLOUD_EMOJI = "\u{1F329}\u{FE0F}"; // cloud with lightning

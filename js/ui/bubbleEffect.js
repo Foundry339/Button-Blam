@@ -3,7 +3,7 @@
 // 50 clicks each guarantee a bubble burst. This module owns the trigger
 // roll and both visuals.
 
-const FISH_CHANCE = 1 / 1000;
+const FISH_CHANCE = 1 / 600;
 export const BUBBLE_POWER_UP_CLICKS = 50;
 
 const FISH_EMOJI = "\u{1F420}";

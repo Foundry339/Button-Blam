@@ -6,7 +6,7 @@
 // tropical fish/bubble, storm/lightning, disco/strobe, and moai/punch
 // power-ups.
 
-const PHOENIX_CHANCE = 1 / 3500;
+const PHOENIX_CHANCE = 1 / 900;
 export const PHOENIX_POWER_UP_CLICKS = 50;
 
 const PHOENIX_EMOJI = "\u{1F426}\u{200D}\u{1F525}";
