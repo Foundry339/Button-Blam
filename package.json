@@ -19,6 +19,7 @@
   },
   "homepage": "https://github.com/Foundry339/Button-Blam#readme",
   "dependencies": {
-    "@upstash/redis": "^1.38.2"
+    "@upstash/redis": "^1.38.2",
+    "obscenity": "^0.4.6"
   }
 }

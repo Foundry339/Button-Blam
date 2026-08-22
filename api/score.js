@@ -1,8 +1,15 @@
 import { Redis } from "@upstash/redis";
+import { RegExpMatcher, englishDataset, englishRecommendedTransformers } from "obscenity";
 
 const redis = new Redis({
   url: process.env.KV_REST_API_URL,
   token: process.env.KV_REST_API_TOKEN,
+});
+
+// Built once per warm serverless instance, not per-request.
+const profanityMatcher = new RegExpMatcher({
+  ...englishDataset.build(),
+  ...englishRecommendedTransformers,
 });
 
 const LEADERBOARD_KEY = "leaderboard:global";
@@ -21,7 +28,15 @@ export default async function handler(req, res) {
 
   const { name, clicks, startedAt } = req.body ?? {};
 
-  if (typeof name !== "string" || !NAME_PATTERN.test(name.trim())) {
+  const trimmedName = typeof name === "string" ? name.trim() : "";
+  // Also check the whitespace-stripped form - names are allowed to contain
+  // spaces, and "f u c k" would otherwise dodge the word-boundary matcher.
+  const collapsedName = trimmedName.replace(/\s+/g, "");
+  if (
+    !NAME_PATTERN.test(trimmedName) ||
+    profanityMatcher.hasMatch(trimmedName) ||
+    profanityMatcher.hasMatch(collapsedName)
+  ) {
     res.status(400).json({ error: "Invalid name" });
     return;
   }
@@ -49,7 +64,7 @@ export default async function handler(req, res) {
     return;
   }
 
-  await redis.zadd(LEADERBOARD_KEY, { gt: true }, { score: clicks, member: name.trim() });
+  await redis.zadd(LEADERBOARD_KEY, { gt: true }, { score: clicks, member: trimmedName });
 
   res.status(200).json({ ok: true });
 }
