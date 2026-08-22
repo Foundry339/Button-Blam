@@ -924,6 +924,73 @@ body {
   }
 }
 
+.jackpot-machine {
+  position: absolute;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 6px;
+  pointer-events: none;
+  opacity: 0;
+  z-index: 6;
+  transform: translate(-50%, -50%) scale(0.6);
+}
+.jackpot-machine.is-active {
+  animation: jackpot-in-kf 400ms cubic-bezier(0.34, 1.4, 0.64, 1) forwards;
+}
+@keyframes jackpot-in-kf {
+  0% { opacity: 0; transform: translate(-50%, -50%) scale(0.6); }
+  100% { opacity: 1; transform: translate(-50%, -50%) scale(1); }
+}
+.jackpot-reels {
+  display: flex;
+  gap: 4px;
+  padding: 5px 7px;
+  background: rgba(0, 0, 0, 0.55);
+  border: 2px solid rgba(251, 191, 36, 0.6);
+  border-radius: 10px;
+}
+.jackpot-machine.is-won .jackpot-reels {
+  animation: jackpot-glow-kf 700ms ease-in-out infinite;
+}
+@keyframes jackpot-glow-kf {
+  0%, 100% { box-shadow: 0 0 0 rgba(251, 191, 36, 0); }
+  50% { box-shadow: 0 0 22px rgba(251, 191, 36, 0.85); }
+}
+.jackpot-reel {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  width: calc(var(--jackpot-size, 60px) * 0.9);
+  height: calc(var(--jackpot-size, 60px) * 0.9);
+  font-size: calc(var(--jackpot-size, 60px) * 0.65);
+  line-height: 1;
+}
+.jackpot-reel.is-locked {
+  animation: jackpot-lock-kf 280ms ease-out;
+}
+@keyframes jackpot-lock-kf {
+  0% { transform: scale(1.35); }
+  100% { transform: scale(1); }
+}
+.jackpot-label {
+  font-weight: 900;
+  font-size: 0.85rem;
+  letter-spacing: 0.03em;
+  color: var(--gold);
+  text-shadow: 0 0 10px rgba(251, 191, 36, 0.8);
+  opacity: 0;
+  transform: scale(0.5);
+}
+.jackpot-machine.is-won .jackpot-label {
+  animation: jackpot-label-kf 450ms cubic-bezier(0.34, 1.6, 0.64, 1) forwards;
+}
+@keyframes jackpot-label-kf {
+  0% { opacity: 0; transform: scale(0.5); }
+  60% { opacity: 1; transform: scale(1.25); }
+  100% { opacity: 1; transform: scale(1); }
+}
+
 .tropical-fish {
   position: fixed;
   left: 0;

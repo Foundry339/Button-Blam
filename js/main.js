@@ -35,6 +35,7 @@ import { maybeSpawnFire } from "./ui/fireEffect.js";
 import { maybeSpawnDonutRain } from "./ui/donutEffect.js";
 import { maybeSpawnEgg } from "./ui/eggEffect.js";
 import { maybeSpawnPinata } from "./ui/pinataEffect.js";
+import { maybeSpawnJackpot } from "./ui/jackpotEffect.js";
 import { maybeTriggerFishPowerUp, spawnFishSwimOut, spawnBubbleBurst, BUBBLE_POWER_UP_CLICKS } from "./ui/bubbleEffect.js";
 import { maybeTriggerStormPowerUp, spawnStormCloudReveal, spawnLightningBurst, spawnRainDrizzle, STORM_POWER_UP_CLICKS } from "./ui/stormEffect.js";
 import { maybeTriggerDiscoPowerUp, spawnDiscoBallReveal, spawnStrobeBurst, DISCO_POWER_UP_CLICKS } from "./ui/discoEffect.js";
@@ -292,6 +293,10 @@ function handleClick(clientX, clientY) {
     }
     if (maybeSpawnPinata(dom.stage, dom.button)) {
       recordSighting(sightingCounts, "pinata");
+      sawEffect = true;
+    }
+    if (maybeSpawnJackpot(dom.stage, dom.button)) {
+      recordSighting(sightingCounts, "jackpot");
       sawEffect = true;
     }
   }
