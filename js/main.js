@@ -54,6 +54,7 @@ import { renderPersonalStats } from "./ui/statsPanel.js";
 import { renderGlobalStats, startAmbientTicker } from "./ui/globalStatsPanel.js";
 import { renderLeaderboard } from "./ui/leaderboardPanel.js";
 import { initScoreForm, setScoreFormBusy, setScoreFormStatus, isValidLeaderboardName } from "./ui/scoreSubmitPanel.js";
+import { renderShareCard } from "./ui/shareCard.js";
 import { renderTeamWar } from "./ui/teamWarPanel.js";
 
 const el = (id) => document.getElementById(id);
@@ -86,6 +87,7 @@ const dom = {
   scoreSubmitName: el("score-submit-name"),
   scoreSubmitButton: el("score-submit-button"),
   scoreSubmitStatus: el("score-submit-status"),
+  shareScoreButton: el("share-score-button"),
 };
 
 // ---- Persisted state -------------------------------------------------
@@ -394,4 +396,42 @@ dom.scoreSubmitForm?.addEventListener("submit", (e) => {
     .finally(() => {
       setScoreFormBusy(dom, false);
     });
+});
+
+const shareCountFormatter = new Intl.NumberFormat("en-US");
+
+dom.shareScoreButton?.addEventListener("click", async () => {
+  dom.shareScoreButton.disabled = true;
+  try {
+    const blob = await renderShareCard(stats.totalClicks);
+    const shareText = `I've clicked the Button Blam button ${shareCountFormatter.format(stats.totalClicks)} times.`;
+    const file = new File([blob], "button-blam-score.png", { type: "image/png" });
+
+    if (navigator.canShare?.({ files: [file] })) {
+      await navigator.share({ files: [file], title: "Button Blam", text: shareText, url: "https://buttonblam.com/" });
+      return;
+    }
+
+    if (navigator.share) {
+      // No file-attachment support on this browser - share text + link instead.
+      await navigator.share({ title: "Button Blam", text: shareText, url: "https://buttonblam.com/" });
+      return;
+    }
+
+    // No Web Share API at all (most desktop browsers) - download the card.
+    const url = URL.createObjectURL(blob);
+    const a = document.createElement("a");
+    a.href = url;
+    a.download = "button-blam-score.png";
+    a.click();
+    URL.revokeObjectURL(url);
+  } catch (err) {
+    if (err.name !== "AbortError") {
+      // AbortError just means the user closed the native share sheet - anything
+      // else (e.g. canvas/share failure) is worth knowing about while this is new.
+      console.error("Share failed:", err);
+    }
+  } finally {
+    dom.shareScoreButton.disabled = false;
+  }
 });

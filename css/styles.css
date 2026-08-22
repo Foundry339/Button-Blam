@@ -1278,6 +1278,35 @@ body {
   letter-spacing: 0.04em;
 }
 
+.share-score-button {
+  display: block;
+  width: 100%;
+  margin-top: 16px;
+  padding: 12px 16px;
+  font-family: inherit;
+  font-size: 0.9rem;
+  font-weight: 700;
+  color: var(--ink);
+  background: rgba(255, 255, 255, 0.06);
+  border: 1px solid var(--panel-border);
+  border-radius: var(--radius-md);
+  cursor: pointer;
+  transition: border-color 150ms ease, background 150ms ease;
+}
+.share-score-button:hover,
+.share-score-button:focus-visible {
+  border-color: rgba(251, 191, 36, 0.5);
+  background: rgba(251, 191, 36, 0.1);
+}
+.share-score-button:focus-visible {
+  outline: 2px solid var(--gold);
+  outline-offset: 2px;
+}
+.share-score-button:disabled {
+  opacity: 0.6;
+  cursor: default;
+}
+
 /* ---------- Button war ---------- */
 .team-your-team {
   text-align: center;
