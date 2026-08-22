@@ -1,0 +1,24 @@
+{
+  "name": "button-blam",
+  "version": "1.0.0",
+  "description": "",
+  "main": "index.js",
+  "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/Foundry339/Button-Blam.git"
+  },
+  "keywords": [],
+  "author": "",
+  "license": "ISC",
+  "type": "module",
+  "bugs": {
+    "url": "https://github.com/Foundry339/Button-Blam/issues"
+  },
+  "homepage": "https://github.com/Foundry339/Button-Blam#readme",
+  "dependencies": {
+    "@upstash/redis": "^1.38.2"
+  }
+}
