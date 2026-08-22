@@ -30,7 +30,6 @@ export const EVENTS = [
   { id: "grow", weight: 4, message: "THE BUTTON GROWS BOLD.", visual: "grow", duration: 3000, tier: "rare" },
   { id: "shake", weight: 5, message: "THE BUTTON IS UNSTABLE.", visual: "shake", duration: 1200, tier: "rare" },
   { id: "text-swap", weight: 4, message: "THE BUTTON HAS THOUGHTS.", visual: "textSwap", duration: 2500, tier: "rare" },
-  { id: "vanish", weight: 3, message: "WHERE DID IT GO?", visual: "vanish", duration: 1000, tier: "rare" },
 ];
 
 // Alternate button labels shown briefly during the "textSwap" event.

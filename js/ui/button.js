@@ -89,7 +89,6 @@ const VISUAL_CLASS_BY_EFFECT = {
   shrink: "btn-shrink",
   grow: "btn-grow",
   shake: "btn-shake",
-  vanish: "btn-vanish",
 };
 
 /**
@@ -103,7 +102,7 @@ export function applyVisualEffect(buttonEl, labelEl, event) {
     clearTimeout(revertTimer);
     revertTimer = null;
   }
-  buttonEl.classList.remove("btn-shrink", "btn-grow", "btn-shake", "btn-vanish");
+  buttonEl.classList.remove("btn-shrink", "btn-grow", "btn-shake");
 
   if (event.visual === "textSwap") {
     const original = labelEl.textContent;
