@@ -1,6 +1,6 @@
 // Tracks how many times each rare visual effect (balloon, rocket, UFO,
-// duck, fire, donut, tropical fish, storm, egg, disco, moai, phoenix)
-// has appeared, persisted across sessions like everything else.
+// duck, fire, donut, tropical fish, storm, egg, disco, moai, phoenix,
+// piñata) has appeared, persisted across sessions like everything else.
 import { loadState, saveState } from "./storage.js";
 
 const KEY = "effectSightings";
@@ -17,6 +17,7 @@ const DEFAULT_COUNTS = {
   disco: 0,
   moai: 0,
   phoenix: 0,
+  pinata: 0,
 };
 
 export function loadSightingCounts() {
