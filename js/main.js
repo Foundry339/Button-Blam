@@ -408,7 +408,11 @@ dom.shareScoreButton?.addEventListener("click", async () => {
     const file = new File([blob], "button-blam-score.png", { type: "image/png" });
 
     if (navigator.canShare?.({ files: [file] })) {
-      await navigator.share({ files: [file], title: "Button Blam", text: shareText, url: "https://buttonblam.com/" });
+      // No `url` here on purpose - the card already carries "buttonblam.com"
+      // as its footer, and including a url alongside a file share makes some
+      // targets (iMessage, etc.) also unfurl the site's own link-preview
+      // card, doubling up with the score card itself.
+      await navigator.share({ files: [file], title: "Button Blam", text: shareText });
       return;
     }
 
