@@ -15,11 +15,20 @@ function defaultStats() {
     highestSessionClicks: 0,
     currentStreak: 0,
     lastClickDate: null,
+    // Set once, on this device's first-ever load - used as the reference
+    // point for the leaderboard's plausibility check (totalClicks divided by
+    // time since firstPlayedAt shouldn't exceed a human click rate).
+    firstPlayedAt: null,
   };
 }
 
 export function loadStats() {
-  return { ...defaultStats(), ...loadState(KEY, {}) };
+  const stats = { ...defaultStats(), ...loadState(KEY, {}) };
+  if (stats.firstPlayedAt === null) {
+    stats.firstPlayedAt = Date.now();
+    persist(stats);
+  }
+  return stats;
 }
 
 function persist(stats) {

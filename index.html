@@ -159,6 +159,22 @@
     <section class="panel" id="leaderboard" aria-labelledby="leaderboard-heading">
       <h2 id="leaderboard-heading" class="panel__heading">Top Button Pushers</h2>
       <ol id="leaderboard-list" class="leaderboard"></ol>
+      <form id="score-submit-form" class="score-submit" novalidate>
+        <label for="score-submit-name" class="score-submit__label">Save your score to the leaderboard</label>
+        <div class="score-submit__row">
+          <input
+            id="score-submit-name"
+            class="score-submit__input"
+            type="text"
+            maxlength="20"
+            placeholder="Your name"
+            autocomplete="off"
+            required
+          />
+          <button id="score-submit-button" type="submit" class="score-submit__button">Save Score</button>
+        </div>
+        <p id="score-submit-status" class="score-submit__status" role="status" aria-live="polite"></p>
+      </form>
     </section>
 
     <!-- 11: Explanation -->

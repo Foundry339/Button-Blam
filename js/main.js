@@ -21,7 +21,8 @@ import { loadSightingCounts, recordSighting } from "./core/sightingsEngine.js";
 import { loadStats, refreshStreakForNewSession, applyClick } from "./core/statsEngine.js";
 import { resetAll } from "./core/storage.js";
 import { loadOrAssignTeam, loadLocalTallyDelta, addToLocalTally } from "./core/teamEngine.js";
-import { fetchGlobalStats, fetchTeamTotals, fetchLeaderboard } from "./core/api.js";
+import { fetchGlobalStats, fetchTeamTotals, fetchLeaderboard, submitScore } from "./core/api.js";
+import { loadSavedLeaderboardName, saveLeaderboardName } from "./core/leaderboardEngine.js";
 import { track } from "./core/analytics.js";
 
 import { pulseButton, punchButton, spawnFloatingValue, applyVisualEffect, startColorCycle, tickColorCycle } from "./ui/button.js";
@@ -52,6 +53,7 @@ import { renderSightingsGrid } from "./ui/sightingsPanel.js";
 import { renderPersonalStats } from "./ui/statsPanel.js";
 import { renderGlobalStats, startAmbientTicker } from "./ui/globalStatsPanel.js";
 import { renderLeaderboard } from "./ui/leaderboardPanel.js";
+import { initScoreForm, setScoreFormBusy, setScoreFormStatus, isValidLeaderboardName } from "./ui/scoreSubmitPanel.js";
 import { renderTeamWar } from "./ui/teamWarPanel.js";
 
 const el = (id) => document.getElementById(id);
@@ -80,6 +82,10 @@ const dom = {
   leaderboardList: el("leaderboard-list"),
   leaderboardSection: el("leaderboard"),
   resetButton: el("reset-button"),
+  scoreSubmitForm: el("score-submit-form"),
+  scoreSubmitName: el("score-submit-name"),
+  scoreSubmitButton: el("score-submit-button"),
+  scoreSubmitStatus: el("score-submit-status"),
 };
 
 // ---- Persisted state -------------------------------------------------
@@ -88,6 +94,7 @@ stats = refreshStreakForNewSession(stats);
 const unlockedAchievements = loadUnlockedAchievements();
 const sightingCounts = loadSightingCounts();
 const userTeam = loadOrAssignTeam();
+let savedLeaderboardName = loadSavedLeaderboardName();
 
 // ---- Session-only state -----------------------------------------------
 let sessionClicks = 0;
@@ -120,13 +127,17 @@ function renderTeam() {
 }
 
 function renderBoard() {
-  renderLeaderboard(dom.leaderboardList, leaderboardEntries, stats.totalClicks);
+  // Once the user has a real entry on the server-side board (fetched under
+  // their saved name), skip the local "YOU" merge so they don't appear twice.
+  const localUserClicks = savedLeaderboardName ? 0 : stats.totalClicks;
+  renderLeaderboard(dom.leaderboardList, leaderboardEntries, localUserClicks);
 }
 
 // ---- Initial render -----------------------------------------------------
 renderPersonal();
 renderAchievementsGrid(dom.achievementsGrid, MILESTONES, unlockedAchievements);
 renderSightingsGrid(dom.sightingsGrid, sightingCounts);
+initScoreForm(dom, savedLeaderboardName);
 
 Promise.all([fetchGlobalStats(), fetchTeamTotals(), fetchLeaderboard()]).then(
   ([globalStats, totals, leaderboard]) => {
@@ -346,4 +357,41 @@ dom.resetButton?.addEventListener("click", () => {
   track("progress_reset");
   resetAll();
   window.location.reload();
+});
+
+dom.scoreSubmitForm?.addEventListener("submit", (e) => {
+  e.preventDefault();
+
+  const name = dom.scoreSubmitName.value.trim();
+  if (!isValidLeaderboardName(name)) {
+    setScoreFormStatus(dom, "error", "Name must be 1-20 characters (letters, numbers, spaces, . ! ? _ -).");
+    return;
+  }
+
+  setScoreFormBusy(dom, true);
+  setScoreFormStatus(dom, "idle", "");
+
+  submitScore({ name, clicks: stats.totalClicks, startedAt: stats.firstPlayedAt })
+    .then((result) => {
+      if (!result.ok) {
+        setScoreFormStatus(dom, "error", result.error ?? "Couldn't save your score. Try again.");
+        return;
+      }
+
+      savedLeaderboardName = name;
+      saveLeaderboardName(name);
+      track("score_submitted", { clicks: stats.totalClicks });
+      setScoreFormStatus(dom, "success", `Saved as "${name}"! Submit again any time your score improves.`);
+
+      fetchLeaderboard().then((leaderboard) => {
+        leaderboardEntries = leaderboard;
+        renderBoard();
+      });
+    })
+    .catch(() => {
+      setScoreFormStatus(dom, "error", "Network error - try again.");
+    })
+    .finally(() => {
+      setScoreFormBusy(dom, false);
+    });
 });
