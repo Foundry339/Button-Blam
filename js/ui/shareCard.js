@@ -39,7 +39,7 @@ export function renderShareCard(clicks) {
 
   ctx.fillStyle = "rgba(247, 243, 255, 0.6)";
   ctx.font = `600 28px ${FONT}`;
-  ctx.fillText("buttonblam.com", WIDTH / 2, HEIGHT - 60);
+  ctx.fillText("buttonblam.com", WIDTH / 2, 480);
 
   return new Promise((resolve) => canvas.toBlob(resolve, "image/png"));
 }
