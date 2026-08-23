@@ -321,7 +321,13 @@ function handleClick(clientX, clientY) {
   }
   if (sawEffect) renderSightingsGrid(dom.sightingsGrid, sightingCounts);
 
-  tickColorCycle(dom.button);
+  // Matrix's grey tint takes priority over fire's color cycle - if fire was
+  // already mid-cycle when matrix triggered, pause it rather than letting it
+  // keep overwriting the same button-color properties every click. It picks
+  // back up with whatever it had left once the matrix tint clears.
+  if (!matrixActive) {
+    tickColorCycle(dom.button);
+  }
 
   if (matrixTintClicksRemaining > 0) {
     matrixTintClicksRemaining -= 1;
