@@ -25,7 +25,7 @@ import { fetchGlobalStats, fetchTeamTotals, fetchLeaderboard, submitScore } from
 import { loadSavedLeaderboardName, saveLeaderboardName } from "./core/leaderboardEngine.js";
 import { track } from "./core/analytics.js";
 
-import { pulseButton, punchButton, spawnFloatingValue, applyVisualEffect, startColorCycle, tickColorCycle } from "./ui/button.js";
+import { pulseButton, punchButton, spawnFloatingValue, applyVisualEffect, startColorCycle, tickColorCycle, applyMatrixTint, clearMatrixTint } from "./ui/button.js";
 import { playClickBloop, playPunchThump, playPhoenixSizzle } from "./ui/sound.js";
 import { maybeSpawnBalloon } from "./ui/balloonEffect.js";
 import { maybeSpawnRocket } from "./ui/rocketEffect.js";
@@ -36,6 +36,7 @@ import { maybeSpawnDonutRain } from "./ui/donutEffect.js";
 import { maybeSpawnEgg } from "./ui/eggEffect.js";
 import { maybeSpawnPinata } from "./ui/pinataEffect.js";
 import { maybeSpawnJackpot } from "./ui/jackpotEffect.js";
+import { maybeSpawnMatrixRain } from "./ui/matrixEffect.js";
 import { maybeTriggerFishPowerUp, spawnFishSwimOut, spawnBubbleBurst, BUBBLE_POWER_UP_CLICKS } from "./ui/bubbleEffect.js";
 import { maybeTriggerStormPowerUp, spawnStormCloudReveal, spawnLightningBurst, spawnRainDrizzle, STORM_POWER_UP_CLICKS } from "./ui/stormEffect.js";
 import { maybeTriggerDiscoPowerUp, spawnDiscoBallReveal, spawnStrobeBurst, DISCO_POWER_UP_CLICKS } from "./ui/discoEffect.js";
@@ -111,6 +112,9 @@ let stormPowerUpClicksRemaining = 0;
 let discoPowerUpClicksRemaining = 0;
 let moaiPowerUpClicksRemaining = 0;
 let phoenixPowerUpClicksRemaining = 0;
+// Not a power-up (doesn't block other sightings) - just a lingering visual
+// aftermath: grey button + green "+N" for the clicks after a matrix sighting.
+let matrixTintClicksRemaining = 0;
 
 function renderPersonal() {
   renderCounter(dom.counter, stats.totalClicks);
@@ -184,11 +188,17 @@ function handleClick(clientX, clientY) {
 
   pulseButton(dom.button);
   // Swap in the flame-colored "+N" and ember trail while phoenix's power-up
-  // is active, back to the normal gold pop once it ends.
+  // is active, or the green "+N" while the matrix tint lingers, back to the
+  // normal gold pop once whichever one ends.
   if (phoenixPowerUpClicksRemaining > 0) {
     spawnEmberFloatingValue(dom.stage, delta, clientX, clientY);
+  } else if (matrixTintClicksRemaining > 0) {
+    spawnFloatingValue(dom.stage, delta, clientX, clientY, "float-value--matrix");
   } else {
     spawnFloatingValue(dom.stage, delta, clientX, clientY);
+  }
+  if (matrixTintClicksRemaining > 0) {
+    applyMatrixTint(dom.button);
   }
   // Swap in a punchy thump for moai's punches or a sizzle for phoenix's
   // embers, back to the normal bloop once whichever power-up ends.
@@ -213,28 +223,32 @@ function handleClick(clientX, clientY) {
     discoPowerUpClicksRemaining > 0 ||
     moaiPowerUpClicksRemaining > 0 ||
     phoenixPowerUpClicksRemaining > 0;
+  // While the matrix tint lingers, only balloon/rocket are allowed to keep
+  // sighting alongside it - everything else (including a fresh matrix
+  // sighting or a power-up starting up) waits until the 50 clicks are up.
+  const matrixActive = matrixTintClicksRemaining > 0;
 
-  if (!powerUpActive && maybeTriggerFishPowerUp()) {
+  if (!powerUpActive && !matrixActive && maybeTriggerFishPowerUp()) {
     recordSighting(sightingCounts, "fish");
     sawEffect = true;
     spawnFishSwimOut(dom.button);
     bubblePowerUpClicksRemaining = BUBBLE_POWER_UP_CLICKS;
-  } else if (!powerUpActive && maybeTriggerStormPowerUp()) {
+  } else if (!powerUpActive && !matrixActive && maybeTriggerStormPowerUp()) {
     recordSighting(sightingCounts, "storm");
     sawEffect = true;
     spawnStormCloudReveal(dom.button);
     stormPowerUpClicksRemaining = STORM_POWER_UP_CLICKS;
-  } else if (!powerUpActive && maybeTriggerDiscoPowerUp()) {
+  } else if (!powerUpActive && !matrixActive && maybeTriggerDiscoPowerUp()) {
     recordSighting(sightingCounts, "disco");
     sawEffect = true;
     spawnDiscoBallReveal(dom.button);
     discoPowerUpClicksRemaining = DISCO_POWER_UP_CLICKS;
-  } else if (!powerUpActive && maybeTriggerMoaiPowerUp()) {
+  } else if (!powerUpActive && !matrixActive && maybeTriggerMoaiPowerUp()) {
     recordSighting(sightingCounts, "moai");
     sawEffect = true;
     spawnMoaiSlamReveal(dom.button);
     moaiPowerUpClicksRemaining = MOAI_POWER_UP_CLICKS;
-  } else if (!powerUpActive && maybeTriggerPhoenixPowerUp()) {
+  } else if (!powerUpActive && !matrixActive && maybeTriggerPhoenixPowerUp()) {
     recordSighting(sightingCounts, "phoenix");
     sawEffect = true;
     spawnPhoenixRebirth(dom.button);
@@ -270,32 +284,37 @@ function handleClick(clientX, clientY) {
       recordSighting(sightingCounts, "rocket");
       sawEffect = true;
     }
-    if (maybeSpawnUfo(dom.stage, dom.button, dom.buttonLabel)) {
+    if (!matrixActive && maybeSpawnUfo(dom.stage, dom.button, dom.buttonLabel)) {
       recordSighting(sightingCounts, "ufo");
       sawEffect = true;
     }
-    if (maybeSpawnDuck(dom.stage, dom.button)) {
+    if (!matrixActive && maybeSpawnDuck(dom.stage, dom.button)) {
       recordSighting(sightingCounts, "duck");
       sawEffect = true;
     }
-    if (maybeSpawnFire(dom.stage, dom.button)) {
+    if (!matrixActive && maybeSpawnFire(dom.stage, dom.button)) {
       recordSighting(sightingCounts, "fire");
       sawEffect = true;
       startColorCycle();
     }
-    if (maybeSpawnDonutRain()) {
+    if (!matrixActive && maybeSpawnDonutRain()) {
       recordSighting(sightingCounts, "donut");
       sawEffect = true;
     }
-    if (maybeSpawnEgg(dom.stage, dom.button)) {
+    if (!matrixActive && maybeSpawnMatrixRain()) {
+      recordSighting(sightingCounts, "matrix");
+      sawEffect = true;
+      matrixTintClicksRemaining = 50;
+    }
+    if (!matrixActive && maybeSpawnEgg(dom.stage, dom.button)) {
       recordSighting(sightingCounts, "egg");
       sawEffect = true;
     }
-    if (maybeSpawnPinata(dom.stage, dom.button)) {
+    if (!matrixActive && maybeSpawnPinata(dom.stage, dom.button)) {
       recordSighting(sightingCounts, "pinata");
       sawEffect = true;
     }
-    if (maybeSpawnJackpot(dom.stage, dom.button)) {
+    if (!matrixActive && maybeSpawnJackpot(dom.stage, dom.button)) {
       recordSighting(sightingCounts, "jackpot");
       sawEffect = true;
     }
@@ -303,6 +322,13 @@ function handleClick(clientX, clientY) {
   if (sawEffect) renderSightingsGrid(dom.sightingsGrid, sightingCounts);
 
   tickColorCycle(dom.button);
+
+  if (matrixTintClicksRemaining > 0) {
+    matrixTintClicksRemaining -= 1;
+    if (matrixTintClicksRemaining === 0) {
+      clearMatrixTint(dom.button);
+    }
+  }
 
   renderPersonal();
 

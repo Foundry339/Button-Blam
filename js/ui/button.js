@@ -20,16 +20,38 @@ export function punchButton(buttonEl) {
   buttonEl.classList.add("btn-punch");
 }
 
-/** Floating "+N" text that rises and fades near the click point. */
-export function spawnFloatingValue(stageEl, value, clientX, clientY) {
+/**
+ * Floating "+N" text that rises and fades near the click point.
+ * @param {string} [variantClass] Extra class for a themed color (e.g. the
+ *   matrix effect's green), on top of the normal gold styling.
+ */
+export function spawnFloatingValue(stageEl, value, clientX, clientY, variantClass) {
   const el = document.createElement("span");
-  el.className = "float-value";
+  el.className = variantClass ? `float-value ${variantClass}` : "float-value";
   el.textContent = `+${value}`;
   const stageRect = stageEl.getBoundingClientRect();
   el.style.left = `${clientX - stageRect.left}px`;
   el.style.top = `${clientY - stageRect.top}px`;
   stageEl.appendChild(el);
   el.addEventListener("animationend", () => el.remove(), { once: true });
+}
+
+// Dark, glitched-grey tint (with a faint matrix-green glow) applied to the
+// button while the matrix effect's aftermath lingers.
+const MATRIX_TINT = { bright: "#6b7280", mid: "#374151", dark: "#111827", glow: "77, 255, 122" };
+
+export function applyMatrixTint(buttonEl) {
+  buttonEl.style.setProperty("--btn-bright", MATRIX_TINT.bright);
+  buttonEl.style.setProperty("--btn-mid", MATRIX_TINT.mid);
+  buttonEl.style.setProperty("--btn-dark", MATRIX_TINT.dark);
+  buttonEl.style.setProperty("--btn-glow", MATRIX_TINT.glow);
+}
+
+export function clearMatrixTint(buttonEl) {
+  buttonEl.style.removeProperty("--btn-bright");
+  buttonEl.style.removeProperty("--btn-mid");
+  buttonEl.style.removeProperty("--btn-dark");
+  buttonEl.style.removeProperty("--btn-glow");
 }
 
 // Color trios (bright/mid/dark + a matching glow tint) the button cycles
