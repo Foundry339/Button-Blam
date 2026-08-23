@@ -29,9 +29,10 @@ export default async function handler(req, res) {
   const { name, clicks, startedAt } = req.body ?? {};
 
   const trimmedName = typeof name === "string" ? name.trim() : "";
-  // Also check the whitespace-stripped form - names are allowed to contain
-  // spaces, and "f u c k" would otherwise dodge the word-boundary matcher.
-  const collapsedName = trimmedName.replace(/\s+/g, "");
+  // Also check the separator-stripped form - names are allowed to contain
+  // spaces and . _ ! ? -, and "f.u.c.k" (or "f u c k") would otherwise dodge
+  // the word-boundary matcher.
+  const collapsedName = trimmedName.replace(/[\s_.!?-]+/g, "");
   if (
     !NAME_PATTERN.test(trimmedName) ||
     profanityMatcher.hasMatch(trimmedName) ||
