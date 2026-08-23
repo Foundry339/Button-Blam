@@ -91,12 +91,22 @@ function spawnCandy(stageEl, centerX, centerY, maxUpward) {
   candy.textContent = CANDY_EMOJI[Math.floor(Math.random() * CANDY_EMOJI.length)];
   candy.setAttribute("aria-hidden", "true");
 
-  // Burst outward and slightly up first, then gravity takes over and pulls
-  // it down further as it fades - reads as spilling, not just radiating.
-  const angle = Math.PI + Math.random() * Math.PI; // upper hemisphere, in radians
-  const burstDistance = 90 + Math.random() * 160;
-  const burstX = Math.cos(angle) * burstDistance;
-  const burstY = Math.max(Math.sin(angle) * burstDistance, -maxUpward);
+  // Burst outward in every direction, then gravity takes over and pulls it
+  // down further as it fades - reads as a real explosion, not a fan.
+  const angle = Math.random() * Math.PI * 2; // full circle, in radians
+  const burstDistance = 120 + Math.random() * 220;
+  let burstX = Math.cos(angle) * burstDistance;
+  let burstY = Math.sin(angle) * burstDistance;
+  // If this particle's straight-line burst would go higher than the room
+  // available above the crack point, scale its whole trajectory down
+  // (not just the Y) so it stays a shorter ray in the same direction,
+  // rather than flattening it onto a shared ceiling with every other
+  // upward-aimed piece - that flattening is what read as "a line" before.
+  if (burstY < -maxUpward) {
+    const scale = maxUpward / -burstY;
+    burstX *= scale;
+    burstY *= scale;
+  }
   const fallX = burstX + (Math.random() * 2 - 1) * 110;
   const fallY = burstY + 520 + Math.random() * 360;
   const rotate = (Math.random() < 0.5 ? -1 : 1) * (240 + Math.random() * 360);
