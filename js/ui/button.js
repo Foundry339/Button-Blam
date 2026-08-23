@@ -72,7 +72,7 @@ let colorCycleClicksRemaining = -1; // -1 = inactive, already at default color
 let lastColorTheme = null;
 
 /** Kick off (or restart) a run of clicks where the button recolors each time. */
-export function startColorCycle(clicks = 50) {
+export function startColorCycle(clicks = 30) {
   colorCycleClicksRemaining = clicks;
 }
 
