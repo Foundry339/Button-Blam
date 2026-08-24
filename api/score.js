@@ -17,7 +17,6 @@ const LEADERBOARD_KEY = "leaderboard:global";
 const NAME_PATTERN = /^[a-zA-Z0-9 _.!?-]{1,20}$/;
 const MAX_CLICKS = 10_000_000;
 const MAX_CLICKS_PER_SECOND = 15;
-const MAX_SESSION_AGE_MS = 24 * 60 * 60 * 1000;
 const CLOCK_SKEW_MS = 5000;
 
 export default async function handler(req, res) {
@@ -48,12 +47,7 @@ export default async function handler(req, res) {
   }
 
   const now = Date.now();
-  if (
-    typeof startedAt !== "number" ||
-    !Number.isFinite(startedAt) ||
-    startedAt > now + CLOCK_SKEW_MS ||
-    startedAt < now - MAX_SESSION_AGE_MS
-  ) {
+  if (typeof startedAt !== "number" || !Number.isFinite(startedAt) || startedAt > now + CLOCK_SKEW_MS) {
     res.status(400).json({ error: "Invalid session" });
     return;
   }
