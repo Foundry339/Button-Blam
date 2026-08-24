@@ -1637,7 +1637,8 @@ body {
 }
 
 .reset-button,
-.donate-button {
+.donate-button,
+.trouble-button {
   margin-top: 0;
   padding: 6px 14px;
   font-family: inherit;
@@ -1677,6 +1678,69 @@ body {
   background: rgba(251, 191, 36, 0.1);
 }
 .donate-button:focus-visible {
+  outline: 2px solid var(--gold);
+  outline-offset: 2px;
+}
+
+.trouble-button {
+  color: rgba(168, 85, 247, 0.75);
+  border-color: rgba(168, 85, 247, 0.35);
+}
+.trouble-button:hover,
+.trouble-button:focus-visible {
+  color: var(--accent-bright);
+  border-color: rgba(168, 85, 247, 0.6);
+  background: rgba(168, 85, 247, 0.1);
+}
+.trouble-button:focus-visible {
+  outline: 2px solid var(--accent-bright);
+  outline-offset: 2px;
+}
+
+/* ---------- Trouble dialog ---------- */
+.trouble-dialog {
+  max-width: 420px;
+  width: calc(100% - 40px);
+  padding: 28px 24px;
+  border: 1px solid var(--panel-border);
+  border-radius: var(--radius-lg);
+  background: var(--bg-2);
+  color: var(--ink);
+  box-shadow: 0 20px 45px -12px rgba(0, 0, 0, 0.6);
+}
+.trouble-dialog::backdrop {
+  background: rgba(10, 4, 20, 0.7);
+  backdrop-filter: blur(2px);
+}
+.trouble-dialog__title {
+  margin: 0 0 14px;
+  font-size: 1.2rem;
+  font-weight: 800;
+}
+.trouble-dialog p {
+  margin: 0 0 14px;
+  font-size: 0.9rem;
+  line-height: 1.6;
+  color: rgba(247, 243, 255, 0.85);
+}
+.trouble-dialog__close {
+  margin-top: 6px;
+  padding: 8px 18px;
+  font-family: inherit;
+  font-size: 0.85rem;
+  font-weight: 700;
+  background: var(--accent);
+  color: #fff;
+  border: none;
+  border-radius: 999px;
+  cursor: pointer;
+  transition: background 150ms ease;
+}
+.trouble-dialog__close:hover,
+.trouble-dialog__close:focus-visible {
+  background: var(--accent-bright);
+}
+.trouble-dialog__close:focus-visible {
   outline: 2px solid var(--gold);
   outline-offset: 2px;
 }

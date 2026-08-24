@@ -86,6 +86,9 @@ const dom = {
   leaderboardList: el("leaderboard-list"),
   leaderboardSection: el("leaderboard"),
   resetButton: el("reset-button"),
+  troubleButton: el("trouble-button"),
+  troubleDialog: el("trouble-dialog"),
+  troubleDialogClose: el("trouble-dialog-close"),
   scoreSubmitForm: el("score-submit-form"),
   scoreSubmitName: el("score-submit-name"),
   scoreSubmitButton: el("score-submit-button"),
@@ -401,6 +404,18 @@ dom.resetButton?.addEventListener("click", () => {
   track("progress_reset");
   resetAll();
   window.location.reload();
+});
+
+dom.troubleButton?.addEventListener("click", () => {
+  dom.troubleDialog?.showModal();
+});
+
+dom.troubleDialogClose?.addEventListener("click", () => {
+  dom.troubleDialog?.close();
+});
+
+dom.troubleDialog?.addEventListener("click", (e) => {
+  if (e.target === dom.troubleDialog) dom.troubleDialog.close();
 });
 
 dom.scoreSubmitForm?.addEventListener("submit", (e) => {

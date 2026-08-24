@@ -203,6 +203,7 @@
       <div class="footer__actions">
         <a id="donate-button" class="donate-button" href="https://donate.stripe.com/28E9ASahl1UzdWD6UCaZi02" target="_blank" rel="noopener">☕ Feed the button</a>
         <button id="reset-button" class="reset-button" type="button">Reset my progress</button>
+        <button id="trouble-button" class="trouble-button" type="button">Having trouble?</button>
       </div>
       <p>Button Blam - proudly accomplishing nothing since today.</p>
       <p><a href="/privacy.html" class="footer__link">Privacy Policy</a></p>
@@ -211,6 +212,19 @@
   </main>
 
   <div id="achievement-toast-container" class="achievement-toast-container" aria-live="polite"></div>
+
+  <dialog id="trouble-dialog" class="trouble-dialog">
+    <h2 class="trouble-dialog__title">Not seeing animations?</h2>
+    <p>
+      If the button doesn't pop when you click it, or balloons and rockets show up without
+      moving or popping, your device probably has an accessibility setting called Remove
+      Animations or Reduce Motion turned on. Button Blam relies on animation for most of its
+      effects, so turning that setting off will let you see everything the game has to offer.
+    </p>
+    <p>On Android, open Settings, then Accessibility, then look for Remove Animations and turn it off.</p>
+    <p>On iPhone, open Settings, then Accessibility, then Motion, then turn off Reduce Motion.</p>
+    <button id="trouble-dialog-close" class="trouble-dialog__close" type="button">Got it</button>
+  </dialog>
 
   <script type="module" src="js/main.js"></script>
 
